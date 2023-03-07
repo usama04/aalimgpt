@@ -39,6 +39,14 @@ async def generate_token(form_data: security.OAuth2PasswordRequestForm = Depends
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect email or password")
     return await services.create_token(db, user)
 
+@app.post("/api/verify-token")
+async def verify_token(db: orm.Session = Depends(services.get_db), user: schemas.User = Depends(services.get_current_user)):
+    return await services.verify_token(db, user)
+
+@app.post("/api/logout")
+async def logout(db: orm.Session = Depends(services.get_db), user: schemas.User = Depends(services.get_current_user)):
+    return await services.logout(db, user)
+
 @app.get("/api/users/me", response_model=schemas.User)
 async def get_user(user: schemas.User = Depends(services.get_current_user)):
     return user
@@ -60,7 +68,7 @@ async def update_profile(profile: schemas.ProfileUpdate, db: orm.Session = Depen
 ### CHATBOT ###
 # Prompt: You are a well versed Islamic Scholar and Mufti who can be asked questions from and he can give answers according to Quran and Sunnah with proper references.
 @app.post("/api/mufti")
-async def mufti(request: Request):
+async def mufti(request: Request, db: orm.Session = Depends(services.get_db), user: schemas.User = Depends(services.get_current_user)):
     received = await request.json()
     messages = received["messages"]
     prompt = [
@@ -68,9 +76,19 @@ async def mufti(request: Request):
     ]
     for message in messages:
         if message["role"] == "user":
-            prompt.append({"role": "user", "content": message["content"]})
+            try:
+                prompt.append({"role": "user", "content": message["message"]})
+            except KeyError:
+                prompt.append({"role": "user", "content": message["content"]})
+            except:
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid message format")
         else:
-            prompt.append({"role": "assistant", "content": message["content"]})
+            try:
+                prompt.append({"role": "assistant", "content": message["content"]})
+            except KeyError:
+                prompt.append({"role": "assistant", "content": message["message"]})
+            except:
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid message format")
     response = openai.ChatCompletion.create(
         model=settings.OPENAI_CHAT_MODEL,
         messages=prompt,

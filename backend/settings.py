@@ -10,7 +10,10 @@ HOST = os.environ.get("HOST")
 PORT = os.environ.get("PORT")
 DATABASE_URL = os.environ.get("DATABASE_URL")
 LOG_LEVEL = "debug"
-SECRET_KEY = os.environ.get("SECRET_KEY")
+JWT_SECRET_KEY = os.environ.get("SECRET_KEY")
 OAUTH2_SCHEME = security.OAuth2PasswordBearer(tokenUrl='/api/login')
 OPENAI_MODEL = os.environ.get("OPENAI_MODEL")
 OPENAI_CHAT_MODEL = os.environ.get("OPENAI_CHAT_MODEL")
+JWT_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7
+ALGORITHM = "HS256"
+AUTH_SCHEME = security.HTTPBearer()

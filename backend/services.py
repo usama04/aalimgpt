@@ -57,16 +57,30 @@ async def authenticate_user(db: orm.Session, email: str, password: str):
 
 async def create_token(db: orm.Session, user: models.User):
     user_obj = schemas.User.from_orm(user)
-    token = jwt.encode(user_obj.dict(), settings.SECRET_KEY, algorithm='HS256')
+    expiry = dt.datetime.utcnow() + dt.timedelta(minutes=settings.JWT_TOKEN_EXPIRE_MINUTES)
+    payload = {"user": user_obj.dict(), "exp": expiry}
+    token = jwt.encode(payload, settings.JWT_SECRET_KEY, algorithm=settings.ALGORITHM)
     return dict(access_token=token, token_type='bearer')
 
 async def get_current_user(db: orm.Session = Depends(get_db), token: str = Depends(settings.OAUTH2_SCHEME)):
     try:
-        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
-        user = db.query(models.User).get(payload.get('id'))
+        payload = jwt.decode(token, settings.JWT_SECRET_KEY, algorithms=[settings.ALGORITHM])
+        if dt.datetime.fromtimestamp(payload.get('exp')) < dt.datetime.utcnow():
+            raise HTTPException(status_code=401, detail='Invalid Credentials')
+        else:
+            user = db.query(models.User).get(payload.get('user')["id"])
     except:
         raise HTTPException(status_code=401, detail='Invalid Credentials')
     return schemas.User.from_orm(user)
+
+async def verify_token(db: orm.Session = Depends(get_db), user: schemas.User = Depends(get_current_user)):
+    if user:
+        return dict(message='Token is valid')
+    else:
+        raise HTTPException(status_code=401, detail='Invalid Credentials')
+
+async def logout(db: orm.Session, user: schemas.User = Depends(get_current_user)):
+    return dict(message='Logged out successfully')
 
 async def update_user(db: orm.Session = Depends(get_db), user: schemas.UserUpdate = Depends(get_current_user)):
     #update existing user

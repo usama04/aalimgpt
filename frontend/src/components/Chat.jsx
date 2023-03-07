@@ -32,6 +32,7 @@ const Chat = () => {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('usertoken'),
           },
           body: JSON.stringify({
             messages: messages,
