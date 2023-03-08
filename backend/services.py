@@ -104,3 +104,10 @@ async def update_profile(db: orm.Session = Depends(get_db), profile: schemas.Pro
     db.commit()
     db.refresh(db_profile)
     return db_profile
+
+async def save_chat_response(db: orm.Session = Depends(get_db), user: schemas.User = Depends(get_current_user), prompt: str = None, generated_response: str = None):
+    chat = models.Chats(user_id=user.id, prompt=prompt, generated_response=generated_response)
+    db.add(chat)
+    db.commit()
+    db.refresh(chat)
+    return chat

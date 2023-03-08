@@ -15,6 +15,7 @@ class User(Base):
     email = sa.Column(sa.String(50), nullable=False, unique=True)
     hashed_password = sa.Column(sa.String(100), nullable=False)
     profile = orm.relationship('Profile', back_populates='user')
+    chats = orm.relationship("Chats", back_populates="user")
     
     def verify_password(self, password):
         return ph.bcrypt.verify(password, self.hashed_password)
@@ -48,3 +49,15 @@ class Profile(Base):
     def __str__(self):
         return f'{self.user.first_name} {self.user.last_name} {self.bio}'
     
+    
+
+class Chats(Base):
+    __tablename__ = "chats"
+
+    id = sa.Column(sa.Integer, primary_key=True, index=True)
+    user_id = sa.Column(sa.Integer, sa.ForeignKey("users.id"))
+    prompt = sa.Column(sa.String)
+    generated_response = sa.Column(sa.String)
+    created_at = sa.Column(sa.String, server_default=sa.sql.func.now())
+
+    user = orm.relationship("User", back_populates="chats")

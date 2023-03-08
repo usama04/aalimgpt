@@ -53,3 +53,18 @@ class UserProfileResponse(pyd.BaseModel):
     
     class Config:
         orm_mode = True
+        
+class ChatsBase(pyd.BaseModel):
+    user_id: int
+    prompt: str
+    generated_response: str
+
+class ChatsCreate(ChatsBase):
+    pass
+
+class Chats(ChatsBase):
+    id: int
+    created_at: Optional[str] = None
+
+    class Config:
+        orm_mode = True

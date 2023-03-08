@@ -5,6 +5,7 @@ import fastapi.security as security
 import sqlalchemy.orm as orm
 import services as services
 import databases.schemas as schemas
+import databases.models as models
 import openai
 import settings
 import passlib.hash as ph
@@ -77,26 +78,29 @@ async def mufti(request: Request, db: orm.Session = Depends(services.get_db), us
     for message in messages:
         if message["role"] == "user":
             try:
-                prompt.append({"role": "user", "content": message["message"]})
+                mes = message["message"]
             except KeyError:
-                prompt.append({"role": "user", "content": message["content"]})
+                mes = message["content"]
             except:
                 raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid message format")
+            prompt.append({"role": "user", "content": mes})
         else:
             try:
-                prompt.append({"role": "assistant", "content": message["content"]})
+                mes = message["message"]
             except KeyError:
-                prompt.append({"role": "assistant", "content": message["message"]})
+                mes = message["content"]
             except:
                 raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid message format")
+            prompt.append({"role": "assistant", "content": mes})
     response = openai.ChatCompletion.create(
         model=settings.OPENAI_CHAT_MODEL,
         messages=prompt,
-        temperature=0.7,
+        temperature=0.4,
         max_tokens=500,
         top_p=1,
         frequency_penalty=0,
         presence_penalty=0.6
     )
     ret_response = {"user": "assistant", "message": response.choices[0].message.content}
+    await services.save_chat_response(db, user, prompt=prompt[-1]["content"], generated_response=ret_response["message"])
     return ret_response
