@@ -2,9 +2,12 @@ import datetime as dt
 import sqlalchemy as sa
 import sqlalchemy.orm as orm
 import passlib.hash as ph
-import databases.database as db
+import sqlalchemy.ext.declarative as dec
 
-class User(db.Base):
+Base = dec.declarative_base()
+metadata = Base.metadata
+
+class User(Base):
     __tablename__ = 'users'
     id = sa.Column(sa.Integer, primary_key=True)
     first_name = sa.Column(sa.String(50), nullable=True)
@@ -27,7 +30,7 @@ class User(db.Base):
 
     
     
-class Profile(db.Base):
+class Profile(Base):
     __tablename__ = 'profiles'
     id = sa.Column(sa.Integer, primary_key=True)
     user_id = sa.Column(sa.Integer, sa.ForeignKey('users.id'))
