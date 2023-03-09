@@ -40,9 +40,11 @@ async def generate_token(form_data: security.OAuth2PasswordRequestForm = Depends
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect email or password")
     return await services.create_token(db, user)
 
+"""
 @app.post("/api/verify-token")
 async def verify_token(db: orm.Session = Depends(services.get_db), user: schemas.User = Depends(services.get_current_user)):
     return await services.verify_token(db, user)
+"""
 
 @app.post("/api/logout")
 async def logout(db: orm.Session = Depends(services.get_db), user: schemas.User = Depends(services.get_current_user)):

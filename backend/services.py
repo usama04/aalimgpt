@@ -119,5 +119,5 @@ async def save_chat_response(db: orm.Session = Depends(get_db), user: schemas.Us
 async def get_chat_history(db: orm.Session = Depends(get_db), user: schemas.User = Depends(get_current_user)):
     return db.query(models.Chats).filter(models.Chats.user_id == user.id).all()
 
-async def get_chat_by_id(db: orm.Session = Depends(get_db), user: schemas.User = Depends(get_current_user), chat_id: int = None):
+async def get_chat_history_by_id(db: orm.Session = Depends(get_db), user: schemas.User = Depends(get_current_user), chat_id: int = None):
     return db.query(models.Chats).filter(models.Chats.user_id == user.id, models.Chats.id == chat_id).first()
