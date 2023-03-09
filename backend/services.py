@@ -8,6 +8,7 @@ import passlib.hash as ph
 import datetime as dt
 import jwt
 import settings
+from typing import List, Dict
 
 
 def create_database():
@@ -105,9 +106,18 @@ async def update_profile(db: orm.Session = Depends(get_db), profile: schemas.Pro
     db.refresh(db_profile)
     return db_profile
 
-async def save_chat_response(db: orm.Session = Depends(get_db), user: schemas.User = Depends(get_current_user), prompt: str = None, generated_response: str = None):
-    chat = models.Chats(user_id=user.id, prompt=prompt, generated_response=generated_response)
+async def save_chat_response(db: orm.Session = Depends(get_db), user: schemas.User = Depends(get_current_user), prompt: List[Dict[str, str]] = None, generated_response: Dict[str, str] = None):
+    chat = models.Chats(user_id=user.id)
+    chat.set_prompt(prompt)
+    chat.set_generated_response(generated_response)
     db.add(chat)
     db.commit()
     db.refresh(chat)
     return chat
+
+
+async def get_chat_history(db: orm.Session = Depends(get_db), user: schemas.User = Depends(get_current_user)):
+    return db.query(models.Chats).filter(models.Chats.user_id == user.id).all()
+
+async def get_chat_by_id(db: orm.Session = Depends(get_db), user: schemas.User = Depends(get_current_user), chat_id: int = None):
+    return db.query(models.Chats).filter(models.Chats.user_id == user.id, models.Chats.id == chat_id).first()

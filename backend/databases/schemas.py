@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List, Optional, Dict
 import datetime as dt
 import pydantic as pyd
 
@@ -56,8 +56,8 @@ class UserProfileResponse(pyd.BaseModel):
         
 class ChatsBase(pyd.BaseModel):
     user_id: int
-    prompt: str
-    generated_response: str
+    prompt: List[Dict[str, str]]
+    generated_response: Dict[str, str]
 
 class ChatsCreate(ChatsBase):
     pass

@@ -102,5 +102,13 @@ async def mufti(request: Request, db: orm.Session = Depends(services.get_db), us
         presence_penalty=0.6
     )
     ret_response = {"user": "assistant", "message": response.choices[0].message.content}
-    await services.save_chat_response(db, user, prompt=prompt[-1]["content"], generated_response=ret_response["message"])
+    await services.save_chat_response(db, user, prompt=messages, generated_response=ret_response)
     return ret_response
+
+@app.get("/api/chat-history")
+async def get_chat_history(db: orm.Session = Depends(services.get_db), user: schemas.User = Depends(services.get_current_user)):
+    return await services.get_chat_history(db, user)
+
+@app.get("/api/chat-history/{chat_id}")
+async def get_chat_history_by_id(chat_id: int, db: orm.Session = Depends(services.get_db), user: schemas.User = Depends(services.get_current_user)):
+    return await services.get_chat_history_by_id(db, user, chat_id)

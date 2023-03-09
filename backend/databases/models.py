@@ -3,6 +3,7 @@ import sqlalchemy as sa
 import sqlalchemy.orm as orm
 import passlib.hash as ph
 import sqlalchemy.ext.declarative as dec
+import json
 
 Base = dec.declarative_base()
 metadata = Base.metadata
@@ -56,8 +57,20 @@ class Chats(Base):
 
     id = sa.Column(sa.Integer, primary_key=True, index=True)
     user_id = sa.Column(sa.Integer, sa.ForeignKey("users.id"))
-    prompt = sa.Column(sa.String)
-    generated_response = sa.Column(sa.String)
+    prompt = sa.Column(sa.JSON)
+    generated_response = sa.Column(sa.JSON)
     created_at = sa.Column(sa.String, server_default=sa.sql.func.now())
 
     user = orm.relationship("User", back_populates="chats")
+    
+    def set_prompt(self, prompt):
+        self.prompt = json.dumps(prompt)
+        
+    def get_prompt(self):
+        return json.loads(self.prompt) if self.prompt else []
+    
+    def set_generated_response(self, generated_response):
+        self.generated_response = json.dumps(generated_response)
+        
+    def get_generated_response(self):
+        return json.loads(self.generated_response) if self.generated_response else []
