@@ -1,6 +1,6 @@
 import { React, useState } from 'react';
 import ChatMessage from './ChatMessage';
-import { Logout } from './Logout';
+import { Sidemenu } from './Sidemenu';
 
 const Chat = () => {
 
@@ -8,10 +8,6 @@ const Chat = () => {
     const [input, setInput] = useState('');
     const [chatLog, setChatLog] = useState([]);
     const [fullChatLog, setFullChatLog] = useState([]);
-
-    function clearChat() {
-        setChatLog([]);
-    }
 
     async function handleSubmit(event) {
         event.preventDefault();
@@ -47,13 +43,7 @@ const Chat = () => {
 
     return (
         <div className="App">
-            <aside className="sidemenu">
-                <Logout />
-                <div className="sidemenu__button" onClick={clearChat}>
-                    <span>+</span>
-                    New Chat
-                </div>
-            </aside>
+            <Sidemenu chatLog={chatLog} setChatLog={setChatLog} />
             <section className="chatbox">
                 <div className="chat-log">
                     {chatLog.map((message, index) => (
