@@ -75,6 +75,17 @@
   transition: ease 0.2s all;
 }
 
+.sidemenu__history {
+  padding: 12px;
+  text-align: left;
+  margin-top: 12px;
+}
+
+.sidemenu__history:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  transition: ease 0.2s all;
+}
+
 .chat-input-holder {
   padding:24px;
   position: absolute;
