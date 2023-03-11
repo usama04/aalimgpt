@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { UserContext } from '../context/UserContext'
 import { Logout } from './Logout'
+import { Trash } from 'react-bootstrap-icons'
 
 const Sidemenu = ({ chatLog, setChatLog }) => {
     const { token } = useContext(UserContext);
@@ -58,8 +59,18 @@ const Sidemenu = ({ chatLog, setChatLog }) => {
             setChatLog([newAssistantMessage]);
         }
 
+    }
 
-
+    async function delete_chat_history({id}) {
+        const response = await fetch(`http://localhost:8080/api/chat-history/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        const data = await response.json();
+        console.log(data)
     }
 
     return (
@@ -72,7 +83,7 @@ const Sidemenu = ({ chatLog, setChatLog }) => {
             <div>
             {prompts && prompts.map(prompt => (
                 <div className="sidemenu__history" key={prompt}>
-                    <span onClick={() => get_chat_history({id: prompt[1]})}>{prompt[0]}</span>
+                    <span onClick={() => get_chat_history({id: prompt[1]})}>{prompt[0]}</span><span onClick={() => delete_chat_history({id: prompt[1]})} id="delete"><Trash /></span>
                 </div>
             ))}
             </div>

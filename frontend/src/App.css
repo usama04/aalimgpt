@@ -177,3 +177,8 @@
   padding-left: 40px;
   padding-right: 40px;
 }
+
+#delete {
+  cursor: pointer;
+  float: right;
+}

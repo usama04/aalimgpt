@@ -114,3 +114,7 @@ async def get_chat_history(db: orm.Session = Depends(services.get_db), user: sch
 @app.get("/api/chat-history/{chat_id}")
 async def get_chat_history_by_id(chat_id: int, db: orm.Session = Depends(services.get_db), user: schemas.User = Depends(services.get_current_user)):
     return await services.get_chat_history_by_id(db, user, chat_id)
+
+@app.delete("/api/chat-history/{chat_id}")
+async def delete_chat_history_by_id(chat_id: int, db: orm.Session = Depends(services.get_db), user: schemas.User = Depends(services.get_current_user)):
+    return await services.delete_chat_history_by_id(db, user, chat_id)

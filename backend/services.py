@@ -121,3 +121,8 @@ async def get_chat_history(db: orm.Session = Depends(get_db), user: schemas.User
 
 async def get_chat_history_by_id(db: orm.Session = Depends(get_db), user: schemas.User = Depends(get_current_user), chat_id: int = None):
     return db.query(models.Chats).filter(models.Chats.user_id == user.id, models.Chats.id == chat_id).first()
+
+async def delete_chat_history_by_id(db: orm.Session = Depends(get_db), user: schemas.User = Depends(get_current_user), chat_id: int = None):
+    db.query(models.Chats).filter(models.Chats.user_id == user.id, models.Chats.id == chat_id).delete()
+    db.commit()
+    return dict(message='Chat history deleted successfully')
