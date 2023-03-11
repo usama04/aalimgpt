@@ -50,12 +50,42 @@
   width: 240px;
   padding: 10px;
   background-color: #202123;
+  overflow: scroll;
+  scrollbar-width: thin;
+  scrollbar-color: #888 #202123;
+}
+
+.sidemenu::-webkit-scrollbar {
+  width: 1px;
+}
+
+.sidemenu::-webkit-scrollbar-track {
+  background: #202123;
+}
+
+.sidemenu::-webkit-scrollbar-thumb {
+  background: #888;
 }
 
 .chatbox {
   flex: 1;
   background-color: #343541;
   position: relative;
+  overflow: scroll;
+  scrollbar-width: thin;
+  scrollbar-color: #888 #343541;
+}
+
+.chatbox::-webkit-scrollbar {
+  width: 1px;
+}
+
+.chatbox::-webkit-scrollbar-track {
+  background: #343541;
+}
+
+.chatbox::-webkit-scrollbar-thumb {
+  background: #888;
 }
 
 .sidemenu__button {
