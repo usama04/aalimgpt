@@ -47,7 +47,7 @@ const Chat = () => {
             <section className="chatbox">
                 <div className="chat-log">
                     {chatLog.map((message, index) => (
-                        <ChatMessage key={index} message={message} />
+                        <ChatMessage key={index} message={message} chatLog={chatLog} />
                     ))}
 
                 </div>
