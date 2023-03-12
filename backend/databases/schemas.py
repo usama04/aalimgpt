@@ -58,6 +58,7 @@ class ChatsBase(pyd.BaseModel):
     user_id: int
     prompt: List[Dict[str, str]]
     generated_response: Dict[str, str]
+    tokens_used: int = 0
 
 class ChatsCreate(ChatsBase):
     pass

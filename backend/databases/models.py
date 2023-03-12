@@ -60,6 +60,7 @@ class Chats(Base):
     prompt = sa.Column(sa.JSON)
     generated_response = sa.Column(sa.JSON)
     created_at = sa.Column(sa.String, server_default=sa.sql.func.now())
+    tokens_used = sa.Column(sa.Integer, default=0, nullable=True)
 
     user = orm.relationship("User", back_populates="chats")
     
@@ -74,3 +75,9 @@ class Chats(Base):
         
     def get_generated_response(self):
         return json.loads(self.generated_response) if self.generated_response else []
+    
+    def count_tokens(self):
+        self.tokens_used = (len(self.prompt) + len(self.generated_response))/4
+        
+    def get_tokens_used(self):
+        return self.tokens_used

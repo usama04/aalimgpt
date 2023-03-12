@@ -110,6 +110,7 @@ async def save_chat_response(db: orm.Session = Depends(get_db), user: schemas.Us
     chat = models.Chats(user_id=user.id)
     chat.set_prompt(prompt)
     chat.set_generated_response(generated_response)
+    chat.count_tokens()
     db.add(chat)
     db.commit()
     db.refresh(chat)
