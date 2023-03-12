@@ -1,12 +1,15 @@
 import React, { useContext } from 'react'
 import { UserContext } from '../context/UserContext'
+import {useNavigate} from 'react-router-dom'
 
 
 const Logout = () => {
     const { setToken } = useContext(UserContext);
+    const navigate = useNavigate();
 
     const logout = () => {
         setToken(null);
+        navigate('/');
     }
 
     return (
