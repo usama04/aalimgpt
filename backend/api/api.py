@@ -62,7 +62,11 @@ async def update_user(user: schemas.UserUpdate, db: orm.Session = Depends(servic
 
 @app.get("/api/profile/me")
 async def get_profile(db: orm.Session = Depends(services.get_db), user: schemas.User = Depends(services.get_current_user)):
-    return await services.get_profile_by_user_id(db, user=user)
+    try:
+        return await services.get_profile_by_user_id(db, user=user)
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Failed to get profile.")
 
 @app.put("/api/profile/me", response_model=schemas.Profile)
 async def update_profile(profile: schemas.ProfileUpdate, db: orm.Session = Depends(services.get_db), user: schemas.User = Depends(services.get_current_user)):

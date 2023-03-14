@@ -35,8 +35,7 @@ class ProfileCreate(ProfileBase):
     pass
 
 class Profile(ProfileBase):
-    id: int
-    user_id: int
+    profile_image: str = None
     created_at: dt.datetime
     updated_at: dt.datetime
     

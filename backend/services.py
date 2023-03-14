@@ -98,11 +98,14 @@ async def get_profile_by_user_id(db: orm.Session = Depends(get_db), user: int = 
 
 async def update_profile(db: orm.Session = Depends(get_db), profile: schemas.ProfileUpdate = Depends(get_profile_by_user_id), user: schemas.User = Depends(get_current_user)):
     db_profile = db.query(models.Profile).filter(models.Profile.user_id == user.id).first()
-    db_profile.bio = profile.bio
-    db_profile.location = profile.location
-    db_profile.birth_date = profile.birth_date
-    db.commit()
-    db.refresh(db_profile)
+    try:
+        db_profile.bio = profile.bio
+        db_profile.location = profile.location
+        db_profile.birth_date = profile.birth_date
+        db.commit()
+        db.refresh(db_profile)
+    except Exception as e:
+        print(e)
     return db_profile
 
 async def update_profile_image(db: orm.Session = Depends(get_db), user: schemas.User = Depends(get_current_user), file: UploadFile = File(...)):
@@ -114,7 +117,8 @@ async def update_profile_image(db: orm.Session = Depends(get_db), user: schemas.
             s3_client.upload_fileobj(file.file, settings.S3_BUCKET_NAME, file_key)
             db_profile.profile_image = f'{settings.S3_BUCKET_URL}/{file_key}'
         except Exception as e:
-            raise HTTPException(status_code=500, detail=e)
+            print(e)
+            raise HTTPException(status_code=500, detail='Error uploading file')
     db.commit()
     db.refresh(db_profile)
     return db_profile
