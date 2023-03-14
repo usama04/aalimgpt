@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request, Depends, HTTPException, status
+from fastapi import FastAPI, Request, Depends, HTTPException, status, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 from api.responses import CustomJSONResponse
 import fastapi.security as security
@@ -60,13 +60,17 @@ async def update_user(user: schemas.UserUpdate, db: orm.Session = Depends(servic
 
 ### USER PROFILE ###
 
-@app.get("/api/profile/me", response_model=schemas.Profile)
+@app.get("/api/profile/me")
 async def get_profile(db: orm.Session = Depends(services.get_db), user: schemas.User = Depends(services.get_current_user)):
     return await services.get_profile_by_user_id(db, user=user)
 
 @app.put("/api/profile/me", response_model=schemas.Profile)
 async def update_profile(profile: schemas.ProfileUpdate, db: orm.Session = Depends(services.get_db), user: schemas.User = Depends(services.get_current_user)):
     return await services.update_profile(db, profile, user)
+
+@app.post("/api/profile/me/upload-image")
+async def upload_image(file: UploadFile = File(...), db: orm.Session = Depends(services.get_db), user: schemas.User = Depends(services.get_current_user)):
+    return await services.update_profile_image(db, user, file)
 
 ### CHATBOT ###
 # Prompt: You are a well versed Islamic Scholar and Mufti who can be asked questions from and he can give answers according to Quran and Sunnah with proper references.

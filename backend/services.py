@@ -1,4 +1,4 @@
-from fastapi import Depends, HTTPException
+from fastapi import Depends, HTTPException, UploadFile, File, Form, status, Request
 import fastapi.security as security
 from databases import database as db
 import sqlalchemy.orm as orm
@@ -101,7 +101,20 @@ async def update_profile(db: orm.Session = Depends(get_db), profile: schemas.Pro
     db_profile.bio = profile.bio
     db_profile.location = profile.location
     db_profile.birth_date = profile.birth_date
-    db_profile.profile_image = profile.profile_image
+    db.commit()
+    db.refresh(db_profile)
+    return db_profile
+
+async def update_profile_image(db: orm.Session = Depends(get_db), user: schemas.User = Depends(get_current_user), file: UploadFile = File(...)):
+    s3_client = settings.s3_client
+    db_profile = db.query(models.Profile).filter(models.Profile.user_id == user.id).first()
+    if file:
+        file_key = f'profile_images/{user.id}/{file.filename}'
+        try:
+            s3_client.upload_fileobj(file.file, settings.S3_BUCKET_NAME, file_key)
+            db_profile.profile_image = f'{settings.S3_BUCKET_URL}/{file_key}'
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=e)
     db.commit()
     db.refresh(db_profile)
     return db_profile
