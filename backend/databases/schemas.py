@@ -32,7 +32,7 @@ class ProfileBase(pyd.BaseModel):
     birth_date: dt.date = None
     
 class ProfileCreate(ProfileBase):
-    pass
+    profile_image: str = None
 
 class Profile(ProfileBase):
     profile_image: str = None

@@ -8,6 +8,8 @@ import { Routes, Route } from 'react-router-dom';
 import { Landing } from './pages/Landing';
 import { Login } from './pages/Login';
 import { Register } from './pages/Register';
+import { ResetPassword } from './pages/ResetPassword';
+import { ForgotPassword } from './pages/ForgotPassword';
 
 
 function App() {
@@ -20,6 +22,8 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       {token && <Route path="/chat" element={<Chat />} />}
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password?token=:token" element={<ResetPassword />} />
     </Routes>
     </>
     

@@ -58,6 +58,14 @@ async def get_user(user: schemas.User = Depends(services.get_current_user)):
 async def update_user(user: schemas.UserUpdate, db: orm.Session = Depends(services.get_db)):
     return await services.update_user(db, user)
 
+@app.post("/api/users/reset-password/{token}")
+async def reset_password(token: str, password: str, confirm_password: str, db: orm.Session = Depends(services.get_db)):
+    return await services.reset_password(db, token, password, confirm_password)
+
+@app.post("/api/users/forgot-password")
+async def forgot_password(email: str, db: orm.Session = Depends(services.get_db)):
+    return await services.forgot_password(db, email)
+
 ### USER PROFILE ###
 
 @app.get("/api/profile/me")

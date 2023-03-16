@@ -50,6 +50,7 @@ const Login = () => {
                         <input type="password" className="form-control rounded-2" id="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} value={password} />
                     </div>
                     <button className="w-100 btn btn-lg btn-primary" type="submit">Login</button>
+                    <a href="/forgot-password" className="mt-3">Forgot Password?</a>
                 </form>
             </main>
         </div>
