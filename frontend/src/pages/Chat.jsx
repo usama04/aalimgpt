@@ -24,7 +24,7 @@ const Chat = () => {
           message: message.message,
         }));
     
-        const response = await fetch('http://localhost:8080/api/mufti', {
+        const response = await fetch('http://localhost:8000/api/mufti', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

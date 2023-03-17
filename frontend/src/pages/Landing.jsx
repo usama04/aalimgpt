@@ -1,7 +1,17 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Nav } from '../components/Nav'
+import { useNavigate } from 'react-router-dom'
 
 const Landing = () => {
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    const token = localStorage.getItem('usertoken')
+    if (token.length > 5) {
+      navigate('/chat')
+    }
+  }, [])
+
   return (
     <div className='App'>
     <div className="container">

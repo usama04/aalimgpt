@@ -17,7 +17,7 @@ const ChatMessage = ({ message, chatLog }) => {
     useEffect(() => {
         if (message.user === "questioner" || message.role === "questioner") {
             const setProfileImage = async () => {
-                const response = await fetch('http://localhost:8080/api/profile/me', {
+                const response = await fetch('http://localhost:8000/api/profile/me', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

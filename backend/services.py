@@ -1,7 +1,4 @@
-from fastapi import Depends, HTTPException, UploadFile, File, Form, status, Request
-import fastapi.security as security
-import aiosmtplib
-from email.message import EmailMessage
+from fastapi import Depends, HTTPException, UploadFile, File
 from databases import database as db
 import sqlalchemy.orm as orm
 import databases.models as models
@@ -11,7 +8,7 @@ import datetime as dt
 import jwt
 import settings
 from typing import List, Dict
-import ssl
+from fastapi_mail import FastMail, MessageSchema, MessageType
 
 
 def create_database():
@@ -97,27 +94,16 @@ async def update_user(db: orm.Session = Depends(get_db), user: schemas.UserUpdat
     return db_user
 
 async def send_email(to_email, subject, body):
-    msg = EmailMessage()
-    msg['Subject'] = subject
-    msg['From'] = settings.EMAIL_HOST_USER
-    msg['To'] = to_email
-    msg.set_content(body)
-    
-    ssl_context = ssl.create_default_context(ssl.Purpose.SERVER_AUTH)
-    ssl_context.check_hostname = False
-    ssl_context.options |= ssl.OP_NO_TLSv1 | ssl.OP_NO_TLSv1_1
-    ssl_context.minimum_version = ssl.TLSVersion.TLSv1_2
-    
+    message = MessageSchema(
+        subject=subject,
+        recipients=[to_email],
+        body=body,
+        subtype=MessageType.html
+    )
+    fm = FastMail(settings.EMAIL_CONFIG)
     try:
-    
-        async with aiosmtplib.SMTP(hostname=settings.EMAIL_HOST, 
-                                port=settings.EMAIL_PORT, 
-                                username=settings.EMAIL_HOST_USER, 
-                                password=settings.EMAIL_HOST_PASSWORD, 
-                                use_tls=True, 
-                                validate_certs=False, 
-                                tls_context=ssl_context) as smtp:
-            await smtp.send_message(msg)
+        await fm.send_message(message)
+        return dict(message='Email sent successfully')
     except Exception as e:
         print(e)
         raise HTTPException(status_code=500, detail='Email could not be sent')
@@ -127,9 +113,9 @@ async def forgot_password(db: orm.Session, email: str):
     if user:
         payload = {"user": user.id, "exp": dt.datetime.utcnow() + dt.timedelta(minutes=settings.JWT_TOKEN_EXPIRE_EMAIL_MINUTES)}
         token = jwt.encode(payload, settings.JWT_SECRET_KEY, algorithm=settings.ALGORITHM)
-        reset_link = f'http://{settings.FRONTEND_URL}/reset-password?token={token}'
+        reset_link = f'{settings.FRONTEND_URL}/reset-password?token={token}'
         subject = 'Password Reset Request'
-        body = f'Hi {user.first_name},\n\nYou have requested to reset your password. Please click the link below to reset your password.\n\n{reset_link}\n\nIf you did not make this request, please ignore this email.'
+        body = f'<p>Hi {user.first_name},\n\nYou have requested to reset your password. Please click the link below to reset your password.\n\n{reset_link}\n\nIf you did not make this request, please ignore this email.</p>'
         await send_email(email, subject, body)
         return dict(message='Password reset link sent to your email')
     else:

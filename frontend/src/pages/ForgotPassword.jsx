@@ -9,7 +9,7 @@ const ForgotPassword = () => {
     const handleForgotPassword = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:8080/api/users/forgot-password', {
+            const response = await fetch('http://localhost:8000/api/users/forgot-password', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -18,11 +18,11 @@ const ForgotPassword = () => {
                     email: email,
                 }),
             });
-            console.log(response.data);
-            setMessage(response.data.detail);
+            console.log(response.data.message);
+            setMessage(response.data.message);
         } catch (error) {
-            console.error(error.response.data.detail);
-            setError(error.response.data.detail);
+            console.error(error.data.detail);
+            setError(error.data.detail);
         }
     };
 

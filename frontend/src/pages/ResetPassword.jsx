@@ -16,7 +16,7 @@ const ResetPassword = ({ match }) => {
 
         try {
             const response = await fetch(
-                `http://localhost:8080/api/users/reset-password/{match.params.resetToken}`,
+                `http://localhost:8000/api/users/reset-password/{match.params.resetToken}`,
                 {
                     method: 'POST',
                     headers: {

@@ -25,6 +25,9 @@ class User(UserBase):
         
 class UserUpdate(UserBase):
     id: int = None
+    
+class EmailSchema(pyd.BaseModel):
+    email: pyd.EmailStr
         
 class ProfileBase(pyd.BaseModel):
     bio: str = None

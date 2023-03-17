@@ -63,8 +63,9 @@ async def reset_password(token: str, password: str, confirm_password: str, db: o
     return await services.reset_password(db, token, password, confirm_password)
 
 @app.post("/api/users/forgot-password")
-async def forgot_password(email: str, db: orm.Session = Depends(services.get_db)):
-    return await services.forgot_password(db, email)
+async def forgot_password(email: schemas.EmailSchema, db: orm.Session = Depends(services.get_db)):
+    email_id = email.email
+    return await services.forgot_password(db, email_id)
 
 ### USER PROFILE ###
 

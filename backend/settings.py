@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 import fastapi.security as security
 import boto3
+from fastapi_mail import ConnectionConfig
 
 load_dotenv()
 
@@ -27,6 +28,7 @@ S3_BUCKET_NAME = os.environ.get("S3_BUCKET_NAME")
 s3_client = boto3.client('s3', aws_access_key_id=AWS_ACCESS_KEY_ID, 
                          aws_secret_access_key=AWS_SECRET_ACCESS_KEY, 
                          region_name=AWS_REGION_NAME)
+
 S3_BUCKET_URL = os.environ.get("S3_BUCKET_URL")
 EMAIL_HOST = os.environ.get("EMAIL_HOST")
 EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
@@ -34,3 +36,15 @@ EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 EMAIL_PORT = os.environ.get("EMAIL_PORT")
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
+
+EMAIL_CONFIG = ConnectionConfig(
+    MAIL_USERNAME=EMAIL_HOST_USER,
+    MAIL_PASSWORD=EMAIL_HOST_PASSWORD,
+    MAIL_FROM=EMAIL_HOST_USER,
+    MAIL_PORT=EMAIL_PORT,
+    MAIL_SERVER=EMAIL_HOST,
+    MAIL_STARTTLS = EMAIL_USE_TLS,
+    MAIL_SSL_TLS = EMAIL_USE_SSL,
+    USE_CREDENTIALS=True,
+    VALIDATE_CERTS=False,
+)
