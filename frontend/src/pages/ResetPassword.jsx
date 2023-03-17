@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { Nav } from '../components/Nav';
+import { useParams } from 'react-router-dom';
 
-const ResetPassword = ({ match }) => {
+const ResetPassword = () => {
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
     const { message, setMessage } = useState('');
+    const { token } = useParams();
 
     const handleResetPassword = async (e) => {
         e.preventDefault();
@@ -16,7 +18,7 @@ const ResetPassword = ({ match }) => {
 
         try {
             const response = await fetch(
-                `http://localhost:8000/api/users/reset-password/{match.params.resetToken}`,
+                `http://localhost:8000/api/users/reset-password/${token}`,
                 {
                     method: 'POST',
                     headers: {

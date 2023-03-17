@@ -23,7 +23,7 @@ function App() {
       <Route path="/register" element={<Register />} />
       {token && <Route path="/chat" element={<Chat />} />}
       <Route path="/forgot-password" element={<ForgotPassword />} />
-      <Route path="/reset-password?token=:token" element={<ResetPassword />} />
+      <Route path="/reset-password/:token" element={<ResetPassword />} />
     </Routes>
     </>
     
