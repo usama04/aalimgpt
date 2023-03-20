@@ -112,6 +112,7 @@ function Profile(props) {
         const data = await response.json();
         if (data.error) {
             setErrorMessages(data.detail);
+
         } else {
             setSuccessMessages(data.detail);
         }
@@ -121,8 +122,6 @@ function Profile(props) {
         <div className='popup'>
             <div className="popup-inner">
                 <button className="btn btn-danger btn-close" onClick={() => props.setTrigger(false)}></button>
-                {errorMessages.length > 0 && <ErrorMessage message={errorMessages} />}
-                {successMessages.length > 0 && <SuccessMessage message={successMessages} />}
                 {props.children}
                 <h1 className="h3 mb-3 fw-normal">Edit Profile</h1>
                 <form className="form-group" onSubmit={handleProfilePic}>

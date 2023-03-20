@@ -6,34 +6,30 @@ const ChatMessage = ({ message, chatLog }) => {
     const [profileImage, setProfileImage] = useState('student.png')
     const [errorMessages, setErrorMessages] = useState([])
     // if messages in the chatlog are updated, re-render the chatlog
+    const setProfilePicture = async () => {
+        const response = await fetch('http://localhost:8000/api/profile/me', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('usertoken')}`
+            }
+        });
+        const data = await response.json();
+        if (data.error) {
+            setErrorMessages(data.detail);
+        } else {
+            setProfileImage(data.profileImage);
+            console.log(data.profileImage)
+        }
+    }
     useEffect(() => {
         //console.log(chatLog)
         for (let i = 0; i < chatLog.length; i++) {
                 message = chatLog[i]
                 console.log(message)
+                setProfilePicture()
         }
     }, [])
-
-    useEffect(() => {
-        if (message.user === "questioner" || message.role === "questioner") {
-            const setProfileImage = async () => {
-                const response = await fetch('http://localhost:8000/api/profile/me', {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('usertoken')}`
-                    }
-                });
-                const data = await response.json();
-                if (data.error) {
-                    setErrorMessages(data.detail);
-                }
-                console.log(data.profile_image)
-                return data.profile_image
-            }
-            setProfileImage()
-        }
-    }, [message])
 
     return (
         <div className={`chat-message ${message.role === "assistant" && "chatgpt"}`}>

@@ -2,8 +2,10 @@ import React, { useContext, useState, useEffect } from 'react'
 import { UserContext } from '../context/UserContext'
 import { Logout } from './Logout'
 import { Trash } from 'react-bootstrap-icons'
+import { ChangePassword } from './ChangePassword'
 
 const Sidemenu = ({ chatLog, setChatLog }) => {
+    const [ passTrigger, setPassTrigger ] = useState(false);
     const { token } = useContext(UserContext);
     const [prompts, setPrompts] = useState([]);
 
@@ -76,6 +78,10 @@ const Sidemenu = ({ chatLog, setChatLog }) => {
     return (
         <aside className="sidemenu">
             <Logout />
+            <div className="sidemenu__button mb-3" onClick={() => setPassTrigger(true)}>
+                Change Password
+            </div>
+            <ChangePassword passTrigger={passTrigger} setPassTrigger={setPassTrigger} />
             <div className="sidemenu__button" onClick={clearChat}>
                 <span>+</span>
                 New Chat
