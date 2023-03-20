@@ -29,6 +29,15 @@ class UserUpdate(UserBase):
 class EmailSchema(pyd.BaseModel):
     email: pyd.EmailStr
         
+class ResetPassword(pyd.BaseModel):
+    password: str
+    confirm_password: str
+    
+class ChangePassword(pyd.BaseModel):
+    old_password: str
+    new_password: str
+    confirm_password: str   
+
 class ProfileBase(pyd.BaseModel):
     bio: str = None
     location: str = None

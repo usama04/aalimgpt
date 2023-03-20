@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { UserContext } from '../context/UserContext'
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 
 const Logout = () => {

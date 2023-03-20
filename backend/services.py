@@ -1,4 +1,5 @@
 from fastapi import Depends, HTTPException, UploadFile, File
+import fastapi.security as security
 from databases import database as db
 import sqlalchemy.orm as orm
 import databases.models as models
@@ -9,6 +10,7 @@ import jwt
 import settings
 from typing import List, Dict
 from fastapi_mail import FastMail, MessageSchema, MessageType
+
 
 
 def create_database():
@@ -113,7 +115,7 @@ async def forgot_password(db: orm.Session, email: str):
     if user:
         payload = {"user": user.id, "exp": dt.datetime.utcnow() + dt.timedelta(minutes=settings.JWT_TOKEN_EXPIRE_EMAIL_MINUTES)}
         token = jwt.encode(payload, settings.JWT_SECRET_KEY, algorithm=settings.ALGORITHM)
-        reset_link = f'{settings.FRONTEND_URL}/reset-password?token={token}'
+        reset_link = f'{settings.FRONTEND_URL}/reset-password/{token}'
         subject = 'Password Reset Request'
         body = f'<p>Hi {user.first_name},\n\nYou have requested to reset your password. Please click the link below to reset your password.\n\n{reset_link}\n\nIf you did not make this request, please ignore this email.</p>'
         await send_email(email, subject, body)
@@ -140,6 +142,19 @@ async def reset_password(db: orm.Session, token: str, password: str, confirm_pas
         return dict(message='Password reset successfully')
     except:
         raise HTTPException(status_code=400, detail='Invalid token')
+    
+async def change_password(db: orm.Session = Depends(get_db), user: schemas.User = Depends(get_current_user), change_password: schemas.ChangePassword = Depends()):
+    user_obj = db.query(models.User).get(user.id)
+    if not user_obj.verify_password(change_password.old_password):
+        raise HTTPException(status_code=400, detail='Current password is incorrect')
+    if change_password.new_password != change_password.confirm_password:
+        raise HTTPException(status_code=400, detail='Passwords do not match')
+    if change_password.old_password == change_password.new_password:
+        raise HTTPException(status_code=400, detail='New password cannot be same as current password')
+    user_obj.set_password(change_password.new_password)
+    db.commit()
+    db.refresh(user_obj)
+    return dict(message='Password changed successfully')
 
 async def get_profile_by_user_id(db: orm.Session = Depends(get_db), user: int = Depends(get_current_user)):
     return db.query(models.Profile).filter(models.Profile.user_id == user.id).first()

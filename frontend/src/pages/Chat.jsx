@@ -1,6 +1,7 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import ChatMessage from '../components/ChatMessage';
 import { Sidemenu } from '../components/Sidemenu';
+import { useNavigate } from 'react-router-dom';
 
 const Chat = () => {
 
@@ -8,6 +9,14 @@ const Chat = () => {
     const [input, setInput] = useState('');
     const [chatLog, setChatLog] = useState([]);
     const [fullChatLog, setFullChatLog] = useState([]);
+    const token = localStorage.getItem('usertoken');
+    const navigate = useNavigate();
+
+    useEffect(() => {
+      if (token === null || token === undefined) {
+        navigate('/login');
+      }
+    }, [token, navigate]);
 
     async function handleSubmit(event) {
         event.preventDefault();

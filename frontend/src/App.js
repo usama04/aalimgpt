@@ -21,9 +21,10 @@ function App() {
       <Route path="/" element={<Landing />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      {token && <Route path="/chat" element={<Chat />} />}
+      {token && <Route path="/chat" element={<Chat />} /> }
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password/:token" element={<ResetPassword />} />
+      <Route path="*" element={<Landing />} />
     </Routes>
     </>
     
