@@ -3,7 +3,7 @@ import { Profile } from './Profile'
 
 const ChatMessage = ({ message, chatLog }) => {
     const [trigger, setTrigger] = useState(false)
-    const [profileImage, setProfileImage] = useState('student.png')
+    const [profile_image, setProfileImage] = useState('student.png')
     const [errorMessages, setErrorMessages] = useState([])
     // if messages in the chatlog are updated, re-render the chatlog
     const setProfilePicture = async () => {
@@ -18,8 +18,8 @@ const ChatMessage = ({ message, chatLog }) => {
         if (data.error) {
             setErrorMessages(data.detail);
         } else {
-            setProfileImage(data.profileImage);
-            console.log(data.profileImage)
+            setProfileImage(data.profile_image);
+            console.log(data.profile_image)
         }
     }
     useEffect(() => {
@@ -36,7 +36,7 @@ const ChatMessage = ({ message, chatLog }) => {
             <div className="chat-message-center">
 
                 {(message.user === "assistant" || message.role === "assistant") && <img className='avatar chatgpt' src="AIImam.png" alt="Mufti" />}
-                {(message.user === "questioner" || message.role === "questioner") && <img className='avatar' src={ profileImage } alt="questioner" onClick={() => setTrigger(true)} />}
+                {(message.user === "questioner" || message.role === "questioner") && <img className='avatar' src={ profile_image } alt="questioner" onClick={() => setTrigger(true)} />}
                 <Profile trigger={trigger} setTrigger={setTrigger} />
                 <div className="message">
                     {message.message}

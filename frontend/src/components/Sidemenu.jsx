@@ -47,6 +47,8 @@ const Sidemenu = ({ chatLog, setChatLog }) => {
         const data = await response.json();
         const prompt = data.prompt
         const bot_response = data.generated_response
+        const bot_dict = JSON.parse(bot_response)
+        const bot_response_dict  = JSON.parse(bot_dict)
         const promptDict = JSON.parse(prompt);
         if (promptDict !== null) {
             const prompt = JSON.parse(promptDict)
@@ -54,10 +56,10 @@ const Sidemenu = ({ chatLog, setChatLog }) => {
                 role: message.role,
                 message: message.message,
             }));
-            const newAssistantMessage = { role: bot_response.role, message: bot_response.message };
+            const newAssistantMessage = { role: bot_response_dict.user, message: bot_response_dict.message };
             setChatLog([...messages, newAssistantMessage]);
         } else {
-            const newAssistantMessage = { role: bot_response.role, message: bot_response.message };
+            const newAssistantMessage = { role: bot_response_dict.role, message: bot_response_dict.message };
             setChatLog([newAssistantMessage]);
         }
 
@@ -72,7 +74,6 @@ const Sidemenu = ({ chatLog, setChatLog }) => {
             }
         })
         const data = await response.json();
-        console.log(data)
     }
 
     return (
@@ -87,11 +88,13 @@ const Sidemenu = ({ chatLog, setChatLog }) => {
                 New Chat
             </div>
             <div>
-            {prompts && prompts.map(prompt => (
+            {prompts && prompts.map(prompt =>
+            (
                 <div className="sidemenu__history" key={prompt}>
                     <span onClick={() => get_chat_history({id: prompt[1]})}>{prompt[0]}</span><span onClick={() => delete_chat_history({id: prompt[1]})} id="delete"><Trash /></span>
                 </div>
-            ))}
+            )
+            )}
             </div>
         </aside>
     )
