@@ -37,14 +37,20 @@ async def create_user(db: orm.Session, user: schemas.UserCreate):
         raise HTTPException(status_code=400, detail='Password is required')
     if password != confirm_password:
         raise HTTPException(status_code=400, detail='Passwords do not match')
-    db_user = models.User(email=user.email, first_name=user.first_name, last_name=user.last_name, hashed_password=ph.bcrypt.hash(password))
+    db_user = models.User(email=user.email, hashed_password=ph.bcrypt.hash(password))
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
     return db_user
 
-async def create_user_profile(db: orm.Session, profile: schemas.ProfileCreate, user_id: int):
-    db_profile = models.Profile(bio=profile.bio, location=profile.location, birth_date=profile.birth_date, profile_image=profile.profile_image, user_id=user_id)
+async def create_user_profile(db: orm.Session, profile: schemas.ProfileCreate, user_id: int, first_name: str, last_name: str):
+    db_profile = models.Profile(
+        first_name=first_name,
+        last_name=last_name,
+        bio=profile.bio, 
+        location=profile.location, 
+        birth_date=profile.birth_date, 
+        profile_image=profile.profile_image, user_id=user_id)
     db.add(db_profile)
     db.commit()
     db.refresh(db_profile)
@@ -176,6 +182,8 @@ async def get_profile_by_user_id(db: orm.Session = Depends(get_db), user: int = 
 async def update_profile(db: orm.Session = Depends(get_db), profile: schemas.ProfileUpdate = Depends(get_profile_by_user_id), user: schemas.User = Depends(get_current_user)):
     db_profile = db.query(models.Profile).filter(models.Profile.user_id == user.id).first()
     try:
+        db_profile.first_name = profile.first_name
+        db_profile.last_name = profile.last_name
         db_profile.bio = profile.bio
         db_profile.location = profile.location
         db_profile.birth_date = profile.birth_date

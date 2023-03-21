@@ -4,10 +4,10 @@ import pydantic as pyd
 
 class UserBase(pyd.BaseModel):
     email: str
-    first_name: str = None
-    last_name: str = None
     
 class UserCreate(UserBase):
+    first_name: str
+    last_name: str
     hashed_password: str
     confirm_password: str
     
@@ -39,6 +39,8 @@ class ChangePassword(pyd.BaseModel):
     confirm_password: str   
 
 class ProfileBase(pyd.BaseModel):
+    first_name: str = None
+    last_name: str = None
     bio: str = None
     location: str = None
     birth_date: dt.date = None

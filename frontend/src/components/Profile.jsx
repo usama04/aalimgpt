@@ -22,53 +22,19 @@ function Profile(props) {
                 }
             });
             const data = await response.json();
+            console.log(data)
             if (data.error) {
                 setErrorMessages(data.detail);
             } else {
+                setFirstName(data.first_name);
+                setLastName(data.last_name);
                 setBio(data.bio);
                 setLocation(data.location);
                 setDob(data.dob);
             }
         }
-        const fetchUser = async () => {
-            const response = await fetch('http://localhost:8000/api/users/me', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('usertoken')}`
-                }
-            });
-            const data = await response.json();
-            if (data.error) {
-                setErrorMessages(data.detail);
-            } else {
-                setFirstName(data.firstName);
-                setLastName(data.lastName);
-            }
-        }
-        fetchUser();
         fetchProfile();
     }, [])
-
-    const updateUser = async () => {
-        const response = await fetch('http://localhost:8000/api/users/me', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('usertoken')}`
-            },
-            body: JSON.stringify({
-                firstName: firstName,
-                lastName: lastName
-            })
-        });
-        const data = await response.json();
-        if (data.error) {
-            setErrorMessages(data.detail);
-        } else {
-            setSuccessMessages(data.detail);
-        }
-    }
 
     const updateProfile = async () => {
         const response = await fetch('http://localhost:8000/api/profile/me', {
@@ -78,6 +44,8 @@ function Profile(props) {
                 'Authorization': `Bearer ${localStorage.getItem('usertoken')}`
             },
             body: JSON.stringify({
+                first_name: firstName,
+                last_name: lastName,
                 bio: bio,
                 location: location,
                 dob: dob
@@ -109,8 +77,7 @@ function Profile(props) {
     }
 
     const handleSubmit = async (e) => {
-        e.preventDefault()
-        await updateUser();
+        e.preventDefault();
         await updateProfile();
     }
 

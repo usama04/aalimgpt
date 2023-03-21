@@ -11,10 +11,9 @@ metadata = Base.metadata
 class User(Base):
     __tablename__ = 'users'
     id = sa.Column(sa.Integer, primary_key=True)
-    first_name = sa.Column(sa.String(50), nullable=True)
-    last_name = sa.Column(sa.String(50), nullable=True)
     email = sa.Column(sa.String(50), nullable=False, unique=True)
     hashed_password = sa.Column(sa.String(100), nullable=False)
+    is_active = sa.Column(sa.Boolean, default=False)
     profile = orm.relationship('Profile', back_populates='user')
     chats = orm.relationship("Chats", back_populates="user")
     
@@ -23,6 +22,9 @@ class User(Base):
     
     def set_password(self, password):
         self.hashed_password = ph.bcrypt.hash(password)
+        
+    def user_activate(self):
+        self.is_active = True
         
     def __repr__(self):
         return f'User: {self.first_name} {self.last_name}; Email: {self.email}'
@@ -37,6 +39,8 @@ class Profile(Base):
     id = sa.Column(sa.Integer, primary_key=True)
     user_id = sa.Column(sa.Integer, sa.ForeignKey('users.id'))
     user = orm.relationship('User', back_populates='profile')
+    first_name = sa.Column(sa.String(50), nullable=True)
+    last_name = sa.Column(sa.String(50), nullable=True)
     bio = sa.Column(sa.String(1000), nullable=True)
     location = sa.Column(sa.String(100), nullable=True)
     birth_date = sa.Column(sa.Date, nullable=True)
