@@ -178,7 +178,7 @@ async def update_profile_image(db: orm.Session = Depends(get_db), user: schemas.
         file_key = f'profile_images/{user.id}/{file.filename}'
         try:
             s3_client.upload_fileobj(file.file, settings.S3_BUCKET_NAME, file_key)
-            db_profile.profile_image = f'{settings.S3_BUCKET_URL}/{file_key}'
+            db_profile.profile_image = f'https://{settings.S3_BUCKET_NAME}.s3.amazonaws.com/profile_images/{user.id}/{file.filename}'
         except Exception as e:
             print(e)
             raise HTTPException(status_code=500, detail='Error uploading file')
