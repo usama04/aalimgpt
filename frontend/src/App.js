@@ -1,7 +1,7 @@
 //import logo from './logo.svg';
 import React, { useContext} from 'react';
 import './App.css';
-import './normal.css';
+import './styles/normal.css';
 import { Chat } from './pages/Chat';
 import { UserContext } from './context/UserContext';
 import { Routes, Route } from 'react-router-dom';
