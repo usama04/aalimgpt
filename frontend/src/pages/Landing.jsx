@@ -11,7 +11,7 @@ const Landing = () => {
     if (token.length > 5) {
       navigate('/chat')
     }
-  }, [])
+  }, [navigate])
 
   return (
     <div className='App section1'>
