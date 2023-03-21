@@ -66,6 +66,8 @@ async def authenticate_user(db: orm.Session, email: str, password: str):
 
 async def create_token(db: orm.Session, user: models.User):
     user_obj = schemas.User.from_orm(user)
+    if user_obj.is_active == False:
+        raise HTTPException(status_code=401, detail='User is not active')
     expiry = dt.datetime.utcnow() + dt.timedelta(minutes=settings.JWT_TOKEN_EXPIRE_MINUTES)
     payload = {"user": user_obj.dict(), "exp": expiry}
     token = jwt.encode(payload, settings.JWT_SECRET_KEY, algorithm=settings.ALGORITHM)
@@ -162,6 +164,36 @@ async def change_password(db: orm.Session = Depends(get_db), user: schemas.User 
     db.refresh(user_obj)
     return dict(message='Password changed successfully')
 
+async def send_verification_email(db: orm.Session = Depends(get_db), user: schemas.User = Depends(get_current_user)):
+    user_obj = db.query(models.User).get(user.id)
+    profile_obj = db.query(models.Profile).filter(models.Profile.user_id == user_obj.id).first()
+    if user_obj.is_active:
+        raise HTTPException(status_code=400, detail='Email already verified')
+    payload = {"user": user_obj.id, "exp": dt.datetime.utcnow() + dt.timedelta(minutes=settings.JWT_TOKEN_EXPIRE_EMAIL_MINUTES)}
+    token = jwt.encode(payload, settings.JWT_SECRET_KEY, algorithm=settings.ALGORITHM)
+    verify_link = f'{settings.FRONTEND_URL}/verify-email/{token}'
+    subject = 'Email Verification'
+    body = f'<p>Hi {profile_obj.first_name},\n\nPlease click the link below to verify your email.\n\n{verify_link}\n\nIf you did not make this request, please ignore this email.</p>'
+    await send_email(user_obj.email, subject, body)
+    return dict(message='Verification link sent to your email')
+
+async def verify_email(db: orm.Session, token: str):
+    try:
+        payload = jwt.decode(token, settings.JWT_SECRET_KEY, algorithms=[settings.ALGORITHM])
+        user = db.query(models.User).get(payload.get('user'))
+        if not user:
+            raise HTTPException(status_code=400, detail='Invalid token')
+        
+        if dt.datetime.fromtimestamp(payload.get('exp')) < dt.datetime.utcnow():
+            raise HTTPException(status_code=400, detail='Token expired')
+        
+        user.is_active = True
+        db.commit()
+        db.refresh(user)
+        return dict(message='Email verified successfully')
+    except:
+        raise HTTPException(status_code=400, detail='Invalid token')
+
 async def delete_user(db: orm.Session = Depends(get_db), user: schemas.User = Depends(get_current_user)):
     user_obj = db.query(models.User).get(user.id)
     try:
@@ -174,7 +206,6 @@ async def delete_user(db: orm.Session = Depends(get_db), user: schemas.User = De
     except Exception as e:
         print(e)
         raise HTTPException(status_code=500, detail='User could not be deleted')
-        
 
 async def get_profile_by_user_id(db: orm.Session = Depends(get_db), user: int = Depends(get_current_user)):
     return db.query(models.Profile).filter(models.Profile.user_id == user.id).first()

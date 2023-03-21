@@ -31,7 +31,12 @@ async def create_user(user: schemas.UserCreate, db: orm.Session = Depends(servic
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered")
     user_obj = await services.create_user(db, user)
     profile_obj = await services.create_user_profile(db, schemas.ProfileCreate(), user_obj.id, first_name=user.first_name, last_name=user.last_name)
-    return await services.create_token(db, user_obj)
+    return await services.send_verification_email(db, user_obj)
+    #return await services.create_token(db, user_obj)
+    
+@app.get("/api/verify-email/{token}")
+async def verify_email(token, db: orm.Session = Depends(services.get_db)):
+    return await services.verify_email(db, token)
 
 @app.post("/api/login")
 async def generate_token(form_data: security.OAuth2PasswordRequestForm = Depends(), db: orm.Session = Depends(services.get_db)):
@@ -39,12 +44,6 @@ async def generate_token(form_data: security.OAuth2PasswordRequestForm = Depends
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect email or password")
     return await services.create_token(db, user)
-
-"""
-@app.post("/api/verify-token")
-async def verify_token(db: orm.Session = Depends(services.get_db), user: schemas.User = Depends(services.get_current_user)):
-    return await services.verify_token(db, user)
-"""
 
 @app.post("/api/logout")
 async def logout(db: orm.Session = Depends(services.get_db), user: schemas.User = Depends(services.get_current_user)):

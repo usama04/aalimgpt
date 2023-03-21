@@ -10,6 +10,7 @@ import { Login } from './pages/Login';
 import { Register } from './pages/Register';
 import { ResetPassword } from './pages/ResetPassword';
 import { ForgotPassword } from './pages/ForgotPassword';
+import { VerifyEmail } from './components/VerifyEmail';
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
       {token && <Route path="/chat" element={<Chat />} /> }
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password/:token" element={<ResetPassword />} />
+      <Route path="/verify-email/:token" element={<VerifyEmail />} />
       <Route path="*" element={<Landing />} />
     </Routes>
     </>
