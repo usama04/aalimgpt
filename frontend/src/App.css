@@ -185,8 +185,8 @@
 
 .popup {
   position: absolute;
-  width: 50%;
-  height: 50%;
+  width: 40%;
+  height: 63%;
   background-color: rgba(0, 0, 0, 0.9);
   display: flex;
   justify-content: center;
@@ -197,7 +197,8 @@
 .popup-inner {
   position: relative;
   width: 100%;
-  max-width: 640px;
+  max-width: 700px;
+  max-height: 800px;
   height: 100%;
   border-radius: 5px;
   overflow: hidden;

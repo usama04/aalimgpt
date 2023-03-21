@@ -91,6 +91,22 @@ function Profile(props) {
         }
     }
 
+    const delete_user = async () => {
+        const response = await fetch('http://localhost:8000/api/users/me', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('usertoken')}`
+            }
+        });
+        const data = await response.json();
+        if (data.error) {
+            setErrorMessages(data.detail);
+        } else {
+            setSuccessMessages(data.detail);
+        }
+
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -121,13 +137,19 @@ function Profile(props) {
     return (props.trigger) ? (
         <div className='popup'>
             <div className="popup-inner">
+                {errorMessages.map((message, index) => {
+                    return <ErrorMessage key={index} message={message} />
+                })}
+                {successMessages.map((message, index) => {
+                    return <SuccessMessage key={index} message={message} />
+                })}
                 <button className="btn btn-danger btn-close" onClick={() => props.setTrigger(false)}></button>
                 {props.children}
                 <h1 className="h3 mb-3 fw-normal">Edit Profile</h1>
                 <form className="form-group" onSubmit={handleProfilePic}>
                     <label htmlFor="file" className="control-label">Profile Picture</label>
                     <input type="file" className="form-control rounded-2" id="file" name="file" aria-describedby="button-addon2" ref={inputRef} />
-                    <button className="btn btn-outline-primay btn-success" onClick={handleProfilePic} id="button-addon2">Upload</button>
+                    <button className="btn btn-outline-primay btn-success mt-3" onClick={handleProfilePic} id="button-addon2">Upload</button>
                 </form>
                 <form className="form-group" onSubmit={handleSubmit}>
                     <label htmlFor="firstName" className="control-label">First Name</label>
@@ -143,7 +165,10 @@ function Profile(props) {
                     <label htmlFor="dob" className="control-label">Date of Birth</label>
                     <input type="text" className="form-control rounded-2" value={dob} onChange={(e) => setDob(e.target.value)} id="dob" />
                 </form>
-                <button className="w-100 btn btn-lg btn-success" type="submit" onClick={handleSubmit}>Submit</button>
+                <button className="w-100 btn btn-lg btn-success mt-3" type="submit" onClick={handleSubmit}>Submit</button>
+                <div className='mt-3'>
+                    <button className="w-100 btn btn-lg btn-danger" onClick={delete_user}>Delete X</button>
+                </div>
             </div>
         </div>
     ) : "";

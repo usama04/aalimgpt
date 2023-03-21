@@ -73,6 +73,10 @@ async def forgot_password(email: schemas.EmailSchema, db: orm.Session = Depends(
 async def change_password(change_request: schemas.ChangePassword, db: orm.Session = Depends(services.get_db), user: schemas.User = Depends(services.get_current_user)):
     return await services.change_password(db, user, change_request)
 
+@app.delete("/api/users/me")
+async def delete_user(db: orm.Session = Depends(services.get_db), user: schemas.User = Depends(services.get_current_user)):
+    return await services.delete_user(db, user)
+
 ### USER PROFILE ###
 
 @app.get("/api/profile/me")

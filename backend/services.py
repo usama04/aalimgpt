@@ -156,6 +156,20 @@ async def change_password(db: orm.Session = Depends(get_db), user: schemas.User 
     db.refresh(user_obj)
     return dict(message='Password changed successfully')
 
+async def delete_user(db: orm.Session = Depends(get_db), user: schemas.User = Depends(get_current_user)):
+    user_obj = db.query(models.User).get(user.id)
+    try:
+        await delete_all_chats(db, user_obj)
+        await delete_profile(db, user_obj)
+        db.delete(user_obj)
+        db.commit()
+        db.refresh(user_obj)
+        return dict(message='User deleted successfully')
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=500, detail='User could not be deleted')
+        
+
 async def get_profile_by_user_id(db: orm.Session = Depends(get_db), user: int = Depends(get_current_user)):
     return db.query(models.Profile).filter(models.Profile.user_id == user.id).first()
 
@@ -186,6 +200,12 @@ async def update_profile_image(db: orm.Session = Depends(get_db), user: schemas.
     db.refresh(db_profile)
     return db_profile
 
+async def delete_profile(db: orm.Session = Depends(get_db), user: schemas.User = Depends(get_current_user)):
+    profile_obj = db.query(models.Profile).filter(models.Profile.user_id == user.id).first()
+    db.delete(profile_obj)
+    db.commit()
+    return dict(message='Profile deleted successfully')
+
 async def save_chat_response(db: orm.Session = Depends(get_db), user: schemas.User = Depends(get_current_user), prompt: List[Dict[str, str]] = None, generated_response: Dict[str, str] = None):
     chat = models.Chats(user_id=user.id)
     chat.set_prompt(prompt)
@@ -207,3 +227,8 @@ async def delete_chat_history_by_id(db: orm.Session = Depends(get_db), user: sch
     db.query(models.Chats).filter(models.Chats.user_id == user.id, models.Chats.id == chat_id).delete()
     db.commit()
     return dict(message='Chat history deleted successfully')
+
+async def delete_all_chats(db: orm.Session = Depends(get_db), user: schemas.User = Depends(get_current_user)):
+    db.query(models.Chats).filter(models.Chats.user_id == user.id).delete()
+    db.commit()
+    return dict(message='All chat history deleted successfully')
