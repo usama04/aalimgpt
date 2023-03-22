@@ -81,3 +81,7 @@ class Chats(ChatsBase):
 
     class Config:
         orm_mode = True
+        
+class AltChatResponse(pyd.BaseModel):
+    response_rating: int = None
+    alt_response: str = None

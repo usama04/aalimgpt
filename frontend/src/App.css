@@ -214,3 +214,39 @@
   cursor: pointer;
   background-color: #888;
 }
+
+.popup2 {
+  position: absolute;
+  width: 30%;
+  height: 30%;
+  background-color: rgba(0, 0, 0, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+
+.popup-inner2 {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  max-height: 400px;
+  height: 100%;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.popup-inner2 .btn-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 20px;
+  height: 20px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background-color: #888;
+}
+
+

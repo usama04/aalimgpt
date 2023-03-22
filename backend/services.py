@@ -271,3 +271,14 @@ async def delete_all_chats(db: orm.Session = Depends(get_db), user: schemas.User
     db.query(models.Chats).filter(models.Chats.user_id == user.id).delete()
     db.commit()
     return dict(message='All chat history deleted successfully')
+
+async def provide_alternate_answer(db: orm.Session = Depends(get_db), user: schemas.User = Depends(get_current_user), chat_id: int = None, alternate_answer: Dict[str, str] = None):
+    rating = alternate_answer.get('rating')
+    alt_answer = alternate_answer.get('alt_response')
+    chat_obj = db.query(models.Chats).filter(models.Chats.user_id == user.id, models.Chats.id == chat_id).first()
+    chat_obj.response_rating = rating
+    chat_obj.alt_response = alt_answer
+    db.commit()
+    db.refresh(chat_obj)
+    return dict(message='Alternate answer provided successfully', answer=chat_obj.alt_response)
+    

@@ -31,12 +31,12 @@ const ChangePassword = (properties) => {
         }
     }
     return (properties.passTrigger) ? (
-        <div className="popup">
-            <div className="popup-inner">
+        <div className="popup2">
+            <div className="popup-inner2">
                 <button className="btn btn-danger btn-close" onClick={() => properties.setPassTrigger(false)}></button>
                 {errorMessages.length > 0 && <ErrorMessage message={errorMessages} />}
                 {successMessages.length > 0 && <SuccessMessage message={successMessages} />}
-                <form onSubmit={handleSubmit} >
+                <form>
                     <h1 className="h3 mb-3 fw-normal">Change your Password</h1>
                     <div className="form-group">
                         <label htmlFor="password">Old Password</label>
@@ -50,7 +50,7 @@ const ChangePassword = (properties) => {
                         <label htmlFor="confirm_password">Confirm Password</label>
                         <input type="password" className="form-control rounded-2" id="confirm_password" placeholder="Confirm Password" onChange={(e) => setConfirmPassword(e.target.value)} value={confirm_password} />
                     </div>
-                    <button type="submit" className="btn btn-primary">Submit</button>
+                    <button className="btn btn-primary" onClick={handleSubmit}>Change Password</button>
                 </form >
             </div>
         </div >

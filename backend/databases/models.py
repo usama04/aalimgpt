@@ -65,6 +65,8 @@ class Chats(Base):
     generated_response = sa.Column(sa.JSON)
     created_at = sa.Column(sa.String, server_default=sa.sql.func.now())
     tokens_used = sa.Column(sa.Integer, default=0, nullable=True)
+    response_rating = sa.Column(sa.Integer, default=0, nullable=True)
+    alt_response = sa.Column(sa.String, nullable=True)
 
     user = orm.relationship("User", back_populates="chats")
     
