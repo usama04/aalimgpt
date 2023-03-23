@@ -14,7 +14,7 @@ const Nav = () => {
       <ul className="navbar-nav me-auto mb-2 mb-md-0">
       </ul>
       <button className="btn btn-outline-success me-2"><Link to="/login" className='text-white nav-link'>Login</Link></button>
-      <button className="btn btn-outline-success"><Link to="/register" className='text-white nav-link'>Register</Link></button>
+      {/*<button className="btn btn-outline-success"><Link to="/register" className='text-white nav-link'>Register</Link></button>*/}
     </div>
   </div>
 </nav>
