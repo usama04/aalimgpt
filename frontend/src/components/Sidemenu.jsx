@@ -24,11 +24,17 @@ const Sidemenu = ({ chatLog, setChatLog }) => {
         .then(response => response.json())
         .then(data => {
             const prompts = data.map(item => {
-                const promptDict = JSON.parse(item.prompt);
-                const prompt = JSON.parse(promptDict)
-                const message = prompt[0].message
-                if (message !== undefined && message.length > 5) {
-                    return [message.toString().slice(0, 20), item.id]
+                // const promptDict = JSON.parse(item.prompt);
+                // const prompt = JSON.parse(promptDict)
+                // const message = prompt[0].message
+                // if (message !== undefined && message.length > 5) {
+                //     return [message.toString().slice(0, 20), item.id]
+                // }
+                const promptList = JSON.parse(item.prompt);
+                const messages = promptList.map(prompt => prompt.message);
+                const filteredMessages = messages.filter(message => message !== undefined && message.length > 5);
+                if (filteredMessages.length > 0) {
+                    return [filteredMessages[0].toString().slice(0, 20), item.id];
                 }
             })
             setPrompts(prompts);
@@ -47,12 +53,10 @@ const Sidemenu = ({ chatLog, setChatLog }) => {
         const data = await response.json();
         const prompt = data.prompt
         const bot_response = data.generated_response
-        const bot_dict = JSON.parse(bot_response)
-        const bot_response_dict  = JSON.parse(bot_dict)
+        const bot_response_dict  = JSON.parse(bot_response)
         const promptDict = JSON.parse(prompt);
         if (promptDict !== null) {
-            const prompt = JSON.parse(promptDict)
-            const messages = prompt.map((message) => ({
+            const messages = promptDict.map((message) => ({
                 role: message.role,
                 message: message.message,
             }));
