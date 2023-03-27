@@ -8,7 +8,7 @@ url = f"{settings.HOST}:{settings.PORT}"
 config.bind = [url]
 config.accesslog = "-"
 config.errorlog = "-"
-config.loglevel = settings.LOG_LEVEL
+#config.loglevel = settings.LOG_LEVEL
 
 async def run_api():
     await serve(get_app(), config)

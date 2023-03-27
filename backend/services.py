@@ -12,7 +12,6 @@ from typing import List, Dict
 from fastapi_mail import FastMail, MessageSchema, MessageType
 
 
-
 def create_database():
     return db.Base.metadata.create_all(bind=db.engine)
 
