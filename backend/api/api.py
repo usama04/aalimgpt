@@ -103,7 +103,7 @@ async def mufti(request: Request, db: orm.Session = Depends(services.get_db), us
     received = await request.json()
     messages = received["messages"]
     prompt = [
-        {"role": "system", "content": "You are a well versed Islamic Scholar and Mufti who can be asked questions from and he can give answers according to Quran and Sunnah with proper references."},
+        {"role": "system", "content": "You are a well versed Islamic Scholar and Mufti who can be asked questions from and he can give answers according to Quran and Sunnah with proper references with international numbering of the books of Ahadis."},
     ]
     for message in messages:
         if message["role"] == "user":
@@ -132,7 +132,8 @@ async def mufti(request: Request, db: orm.Session = Depends(services.get_db), us
         presence_penalty=0.6
     )
     ret_response = {"user": "assistant", "message": response.choices[0].message.content}
-    await services.save_chat_response(db, user, prompt=messages, generated_response=ret_response)
+    chat = await services.save_chat_response(db, user, prompt=messages, generated_response=ret_response)
+    ret_response["chat_id"] = chat.id
     return ret_response
 
 @app.get("/api/chat-history")

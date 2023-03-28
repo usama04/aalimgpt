@@ -9,7 +9,7 @@ const AltAnswer = (props) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const response = await fetch(`http://localhost:8000/api/chat-history/${props.questionId}/`, {
+        const response = await fetch(`http://localhost:8000/api/chat-history/${props.questionId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -17,19 +17,18 @@ const AltAnswer = (props) => {
             },
             body: JSON.stringify({
                 response_rating: props.responseRating,
-                alt_answer: altAnswer
+                alt_response: altAnswer
             })
         });
         const data = await response.json();
         if (data.error) {
             setErrorMessages(data.detail);
         } else {
-            setSuccessMessages(data.detail);
+            setSuccessMessages(data.message);
             props.setAnswerTrigger(false);
         }
     }
-    
-  return (props.answerTrigger) ? (
+  return (
     <div className='popup2'>
         <div className='popup-inner2'>
         <button className="btn btn-danger btn-close" onClick={() => props.setAnswerTrigger(false)}></button>
@@ -45,7 +44,7 @@ const AltAnswer = (props) => {
             </form>
         </div>
     </div>
-  ): "";
+  );
 }
 
 export { AltAnswer }

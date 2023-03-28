@@ -11,6 +11,7 @@ import { Register } from './pages/Register';
 import { ResetPassword } from './pages/ResetPassword';
 import { ForgotPassword } from './pages/ForgotPassword';
 import { VerifyEmail } from './components/VerifyEmail';
+import { AltAnswer } from './components/AltAnswer';
 
 
 function App() {

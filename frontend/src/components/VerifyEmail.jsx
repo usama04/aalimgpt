@@ -17,6 +17,7 @@ const VerifyEmail = () => {
             });
             const data = await response.json();
             if (data.error) {
+                console.log(data.detail);
                 setErrorMessages(data.detail);
             } else {
                 setSuccessMessages(data.detail);

@@ -45,7 +45,7 @@ const Chat = () => {
         });
     
         const data = await response.json();
-        const newAssistantMessage = { user: data.user, message: data.message };
+        const newAssistantMessage = { user: data.user, message: data.message, chat_id: data.chat_id };
         setChatLog([...chatLogNew, newAssistantMessage]);
         setFullChatLog([...fullChatLogNew, newAssistantMessage]);
       }
