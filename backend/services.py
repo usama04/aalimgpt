@@ -121,10 +121,11 @@ async def forgot_password(db: orm.Session, email: str):
     user = await get_user_by_email(db, email=email)
     if user:
         payload = {"user": user.id, "exp": dt.datetime.utcnow() + dt.timedelta(minutes=settings.JWT_TOKEN_EXPIRE_EMAIL_MINUTES)}
+        profile = db.query(models.Profile).filter(models.Profile.user_id == user.id).first()
         token = jwt.encode(payload, settings.JWT_SECRET_KEY, algorithm=settings.ALGORITHM)
         reset_link = f'{settings.FRONTEND_URL}/reset-password/{token}'
         subject = 'Password Reset Request'
-        body = f'<p>Hi {user.first_name},\n\nYou have requested to reset your password. Please click the link below to reset your password.\n\n{reset_link}\n\nIf you did not make this request, please ignore this email.</p>'
+        body = f'<p>Hi {profile.first_name},\n\nYou have requested to reset your password. Please click the link below to reset your password.\n\n{reset_link}\n\nIf you did not make this request, please ignore this email.</p>'
         await send_email(email, subject, body)
         return dict(message='Password reset link sent to your email')
     else:

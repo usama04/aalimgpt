@@ -30,11 +30,10 @@ const ResetPassword = () => {
                     }),
                 }
             );
-            console.log(response.data);
+            //console.log(response.data);
             setMessage(response.data.detail);
         } catch (error) {
-            console.error(error.response.data.detail);
-            setError(error.response.data.detail);
+            setError("Couldn't reset password");
         }
     };
 

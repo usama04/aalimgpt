@@ -87,3 +87,4 @@ class Chats(Base):
         
     def get_tokens_used(self):
         return self.tokens_used
+    
