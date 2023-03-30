@@ -19,10 +19,10 @@ const ForgotPassword = () => {
                 }),
             });
             //console.log(response.data.message);
-            setMessage(response.data.message);
+            setMessage("Email Sent successfully");
         } catch (error) {
             //console.log(error.detail);
-            setError(error.detail);
+            setError("We encountered an Error");
         }
     };
 

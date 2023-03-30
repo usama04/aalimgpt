@@ -14,6 +14,7 @@ const Register = () => {
     const [confirmPassword, setConfirmPassword] = useState(''); // [confirmPassword, setConfirmPassword] = useState('') is a destructuring assignment
     //const { setToken } = useContext(UserContext);
     const [errorMessages, setErrorMessages] = useState([]);
+    const [successMessage, setSuccessMessage] = useState([]);
     // const navigate = useNavigate();
 
     const submitRegistration = async (e) => {
