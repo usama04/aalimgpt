@@ -1,9 +1,9 @@
 import React, { useContext, useState } from 'react';
-import { UserContext } from '../context/UserContext';
+//import { UserContext } from '../context/UserContext';
 import '../styles/sign-in.css';
 import { ErrorMessage } from '../components/ErrorMessage';
 import { SuccessMessage } from '../components/SuccessMessage';
-import { useNavigate } from 'react-router-dom';
+//import { useNavigate } from 'react-router-dom';
 import { Nav } from '../components/Nav';
 
 const Register = () => {
@@ -14,8 +14,7 @@ const Register = () => {
     const [confirmPassword, setConfirmPassword] = useState(''); // [confirmPassword, setConfirmPassword] = useState('') is a destructuring assignment
     //const { setToken } = useContext(UserContext);
     const [errorMessages, setErrorMessages] = useState([]);
-    const [successMessage, setSuccessMessage] = useState([]);
-    //const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     const submitRegistration = async (e) => {
         const response = await fetch('http://localhost:8000/api/register', {
@@ -35,6 +34,7 @@ const Register = () => {
         if (data.error) {
             setErrorMessages(data.detail);
         } else {
+          //setToken(data.access_token);
           setSuccessMessage(data.message);
         }
     }

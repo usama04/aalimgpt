@@ -18,10 +18,10 @@ const ForgotPassword = () => {
                     email: email,
                 }),
             });
-            console.log(response.data.message);
+            //console.log(response.data.message);
             setMessage(response.data.message);
         } catch (error) {
-            console.log(error.detail);
+            //console.log(error.detail);
             setError(error.detail);
         }
     };
