@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import { UserContext } from '../context/UserContext';
 import '../styles/sign-in.css';
 import { ErrorMessage } from '../components/ErrorMessage';
+import { SuccessMessage } from '../components/SuccessMessage';
 import { useNavigate } from 'react-router-dom';
 import { Nav } from '../components/Nav';
 
@@ -11,9 +12,10 @@ const Register = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState(''); // [password, setPassword] = useState('') is a destructuring assignment
     const [confirmPassword, setConfirmPassword] = useState(''); // [confirmPassword, setConfirmPassword] = useState('') is a destructuring assignment
-    const { setToken } = useContext(UserContext);
+    //const { setToken } = useContext(UserContext);
     const [errorMessages, setErrorMessages] = useState([]);
-    const navigate = useNavigate();
+    const [successMessage, setSuccessMessage] = useState([]);
+    //const navigate = useNavigate();
 
     const submitRegistration = async (e) => {
         const response = await fetch('http://localhost:8000/api/register', {
@@ -33,8 +35,7 @@ const Register = () => {
         if (data.error) {
             setErrorMessages(data.detail);
         } else {
-          setToken(data.access_token);
-          navigate('/chat');
+          setSuccessMessage(data.message);
         }
     }
 
@@ -52,6 +53,7 @@ const Register = () => {
     <div className="App">
       <Nav />
     <main className="form-signin w-100 m-auto pt-5 mt-5">
+    {successMessage.length > 0 && <SuccessMessage message={successMessage} />}
     {errorMessages.length > 0 && <ErrorMessage message={errorMessages} />}
     <form onSubmit={handleSubmit}>
     <h1 className="h3 mb-3 fw-normal">Please Register</h1>
