@@ -14,7 +14,7 @@ function Profile(props) {
 
     useEffect(() => {
         const fetchProfile = async () => {
-            const response = await fetch('http://localhost:8000/api/profile/me', {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/profile/me`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -36,7 +36,7 @@ function Profile(props) {
     }, [])
 
     const updateProfile = async () => {
-        const response = await fetch('http://localhost:8000/api/profile/me', {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/profile/me`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -59,7 +59,7 @@ function Profile(props) {
     }
 
     const delete_user = async () => {
-        const response = await fetch('http://localhost:8000/api/users/me', {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/users/me`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -84,7 +84,7 @@ function Profile(props) {
         e.preventDefault()
         const formData = new FormData();
         formData.append('file', inputRef.current.files[0]);
-        const response = await fetch('http://localhost:8000/api/profile/me/upload-image', {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/profile/me/upload-image`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('usertoken')}`

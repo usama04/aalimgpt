@@ -14,7 +14,7 @@ export const UserProvider = (props) => {
                     "Authorization": `Bearer ${token}`
                 }
             };
-            const response = await fetch('/api/users/me', requestOptions);
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/users/me`, requestOptions);
 
             if (!response.ok) {
                 setToken(null);

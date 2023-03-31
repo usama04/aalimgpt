@@ -19,7 +19,7 @@ const Login = () => {
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: JSON.stringify(`grant_type=&username=${email}&password=${password}&scope=&client_id=&client_secret=`),
         };
-        const response = await fetch('http://localhost:8000/api/login', requestOptions);
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/login`, requestOptions);
         const data = await response.json();
         if (data.error) {
             setErrorMessages(data.detail);

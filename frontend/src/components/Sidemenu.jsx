@@ -14,7 +14,7 @@ const Sidemenu = ({ chatLog, setChatLog }) => {
     }
 
     useEffect(() => {
-        fetch('http://localhost:8000/api/chat-history', {
+        fetch(`${process.env.REACT_APP_API_URL}/api/chat-history`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -43,7 +43,7 @@ const Sidemenu = ({ chatLog, setChatLog }) => {
     }, [token]);
 
     async function get_chat_history({id}){
-        const response = await fetch(`http://localhost:8000/api/chat-history/${id}`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/chat-history/${id}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -70,7 +70,7 @@ const Sidemenu = ({ chatLog, setChatLog }) => {
     }
 
     async function delete_chat_history({id}) {
-        const response = await fetch(`http://localhost:8000/api/chat-history/${id}`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/chat-history/${id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',

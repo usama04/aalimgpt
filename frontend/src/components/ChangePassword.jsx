@@ -10,7 +10,7 @@ const ChangePassword = (properties) => {
     const [successMessages, setSuccessMessages] = useState([])
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const response = await fetch('http://localhost:8000/api/users/change-password', {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/users/change-password`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

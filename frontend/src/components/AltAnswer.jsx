@@ -9,7 +9,7 @@ const AltAnswer = (props) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const response = await fetch(`http://localhost:8000/api/chat-history/${props.questionId}`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/chat-history/${props.questionId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

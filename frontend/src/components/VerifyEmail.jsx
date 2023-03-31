@@ -9,7 +9,7 @@ const VerifyEmail = () => {
     const navigate = useNavigate();
     useEffect(() => {
         const verifyEmail = async () => {
-            const response = await fetch(`http://localhost:8000/api/verify-email/${token}`, {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/verify-email/${token}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

@@ -7,9 +7,13 @@ const Landing = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    const token = localStorage.getItem('usertoken')
-    if (token.length > 5) {
-      navigate('/chat')
+    try {
+      const token = localStorage.getItem('usertoken')
+      if (token.length > 5) {
+        navigate('/chat')
+      }
+    } catch (error) {
+      
     }
   }, [navigate])
 

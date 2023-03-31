@@ -15,7 +15,7 @@ const ChatMessage = ({ message, chatLog }) => {
     const [responseRating, setResponseRating] = useState(0)
     // if messages in the chatlog are updated, re-render the chatlog
     const setProfilePicture = async () => {
-        const response = await fetch('http://localhost:8000/api/profile/me', {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/profile/me`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -54,7 +54,7 @@ const ChatMessage = ({ message, chatLog }) => {
                     {(message.user === "assistant" || message.role === "assistant" ) && <div className="thumbs">
                         <button onClick={() => {
                             setResponseRating(1);
-                            const response = fetch(`http://localhost:8000/api/chat-history/${message.chat_id}`, {
+                            const response = fetch(`${process.env.REACT_APP_API_URL}/api/chat-history/${message.chat_id}`, {
                                 method: 'PUT',
                                 headers: {
                                     'Content-Type': 'application/json',
