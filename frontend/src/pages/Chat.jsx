@@ -75,7 +75,7 @@ const Chat = () => {
                     {isLoading && <div className="loading-animation"></div>}
                   </div>
                     <form onSubmit={handleSubmit}>
-                      <div className="form-group">
+                      <div className="chat-form-group">
                       
                       <div className="chat-input-container">
                         <input
