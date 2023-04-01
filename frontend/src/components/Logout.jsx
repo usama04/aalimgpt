@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import { UserContext } from '../context/UserContext'
 import { useNavigate } from 'react-router-dom'
+import '../styles/Sidemenu.css'
 
 
 const Logout = () => {

@@ -3,8 +3,9 @@ import { UserContext } from '../context/UserContext'
 import { Logout } from './Logout'
 import { Trash } from 'react-bootstrap-icons'
 import { ChangePassword } from './ChangePassword'
+import "../styles/Sidemenu.css"
 
-const Sidemenu = ({ chatLog, setChatLog }) => {
+const Sidemenu = ({ chatLog, setChatLog, toggleSideMenu }) => {
     const [ passTrigger, setPassTrigger ] = useState(false);
     const { token } = useContext(UserContext);
     const [prompts, setPrompts] = useState([]);
@@ -80,9 +81,11 @@ const Sidemenu = ({ chatLog, setChatLog }) => {
         const data = await response.json();
     }
 
-    return (
+    return (toggleSideMenu &&
         <aside className="sidemenu">
-            <Logout />
+            <div className="mt-5">
+                <Logout />
+            </div>
             <div className="sidemenu__button mb-3" onClick={() => setPassTrigger(true)}>
                 Change Password
             </div>

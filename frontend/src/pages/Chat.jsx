@@ -2,6 +2,9 @@ import { React, useState, useEffect } from 'react';
 import ChatMessage from '../components/ChatMessage';
 import { Sidemenu } from '../components/Sidemenu';
 import { useNavigate } from 'react-router-dom';
+import '../styles/Sidemenu.css'
+// import bars icon from bootstrap
+import { ThreeDotsVertical } from 'react-bootstrap-icons';
 
 const Chat = () => {
 
@@ -11,6 +14,7 @@ const Chat = () => {
     const [fullChatLog, setFullChatLog] = useState([]);
     const token = localStorage.getItem('usertoken');
     const navigate = useNavigate();
+    const [toggleSideMenu, setToggleSideMenu] = useState(true);
 
     useEffect(() => {
       if (token === null || token === undefined) {
@@ -52,7 +56,7 @@ const Chat = () => {
 
     return (
         <div className="App">
-            <Sidemenu chatLog={chatLog} setChatLog={setChatLog} />
+            <Sidemenu chatLog={chatLog} setChatLog={setChatLog} toggleSideMenu={toggleSideMenu} />
             <section className="chatbox">
                 <div className="chat-log">
                     {chatLog.map((message, index) => (
@@ -61,6 +65,9 @@ const Chat = () => {
 
                 </div>
                 <div className="chat-input-holder">
+                  <div className="side-menu-toggle-btn" onClick={() => setToggleSideMenu(!toggleSideMenu)}>
+                    <ThreeDotsVertical />
+                  </div>
                     <form onSubmit={handleSubmit}>
                         <input
                             rows="1"
