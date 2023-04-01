@@ -46,6 +46,12 @@
 }
 
 
+.chatbox-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 .chatbox {
   flex: 1;
   background-color: #343541;
@@ -68,27 +74,88 @@
 }
 
 .chat-input-holder {
-  padding:24px;
-  position: absolute;
+  padding: 24px;
+  position: sticky;
   bottom: 0;
   left: 0;
   right: 0;
+  z-index: 1;
+  background-color: #343541;
+}
+
+
+.form-group {
+  position: relative;
+  height: 50px;
+}
+
+.chat-input-container {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  height: 100%;
+  width: 100%;
 }
 
 .chat-input-textarea {
   background-color: #40414f;
-  width: 90%;
   padding: 12px;
   color: #fff;
   font-size: 1.25em;
   border-radius: 5px;
   border: none;
   outline: none;
-  box-shadow: 0 0 8px 0 rgba(0,0,0,0.25);
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.25);
+  width: calc(100% - 50px); /* Width of input minus width of button */
 }
+
+.chat-input-button {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 50px;
+  background-color: #202123;
+  color: #fff;
+  font-size: 1.25em;
+  border-radius: 0 5px 5px 0;
+  border: none;
+  outline: none;
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.25);
+  padding: 12px;
+  cursor: pointer;
+}
+
+.animation-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 16px; /* Add margin to separate from the chatbox */
+}
+
+
+.loading-animation {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  border: 2px solid transparent;
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.5s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 
 .chat-log {
   text-align: left;
+  margin-bottom: auto;
 }
 
 .chat-message {
@@ -98,7 +165,6 @@
 .chat-message.chatgpt {
   background-color: #444654;
 }
-
 
 .chat-message-center {
   padding: 12px;

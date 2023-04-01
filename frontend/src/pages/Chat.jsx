@@ -3,8 +3,7 @@ import ChatMessage from '../components/ChatMessage';
 import { Sidemenu } from '../components/Sidemenu';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Sidemenu.css'
-// import bars icon from bootstrap
-import { ThreeDotsVertical } from 'react-bootstrap-icons';
+import { ThreeDotsVertical, SendFill } from 'react-bootstrap-icons';
 
 const Chat = () => {
 
@@ -15,6 +14,7 @@ const Chat = () => {
     const token = localStorage.getItem('usertoken');
     const navigate = useNavigate();
     const [toggleSideMenu, setToggleSideMenu] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
       if (token === null || token === undefined) {
@@ -24,6 +24,7 @@ const Chat = () => {
 
     async function handleSubmit(event) {
         event.preventDefault();
+        setIsLoading(true);
         const newMessage = { user: 'questioner', message: input };
         const chatLogNew = [...chatLog, newMessage];
         const fullChatLogNew = [...fullChatLog, newMessage];
@@ -36,7 +37,7 @@ const Chat = () => {
           role: message.user,
           message: message.message,
         }));
-    
+        
         const response = await fetch(`${process.env.REACT_APP_API_URL}/api/mufti`, {
           method: 'POST',
           headers: {
@@ -47,8 +48,9 @@ const Chat = () => {
             messages: messages,
           }),
         });
-    
+        
         const data = await response.json();
+        setIsLoading(false);
         const newAssistantMessage = { user: data.user, message: data.message, chat_id: data.chat_id };
         setChatLog([...chatLogNew, newAssistantMessage]);
         setFullChatLog([...fullChatLogNew, newAssistantMessage]);
@@ -58,6 +60,7 @@ const Chat = () => {
         <div className="App">
             <Sidemenu chatLog={chatLog} setChatLog={setChatLog} toggleSideMenu={toggleSideMenu} />
             <section className="chatbox">
+            <div className="chatbox-container">
                 <div className="chat-log">
                     {chatLog.map((message, index) => (
                         <ChatMessage key={index} message={message} chatLog={chatLog} />
@@ -68,14 +71,24 @@ const Chat = () => {
                   <div className="side-menu-toggle-btn" onClick={() => setToggleSideMenu(!toggleSideMenu)}>
                     <ThreeDotsVertical />
                   </div>
+                  <div className="animation-container">
+                    {isLoading && <div className="loading-animation"></div>}
+                  </div>
                     <form onSubmit={handleSubmit}>
+                      <div className="form-group">
+                      
+                      <div className="chat-input-container">
                         <input
                             rows="1"
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                             className="chat-input-textarea"></input>
+                        <button type="submit" className="chat-input-button"><SendFill /></button>
+                        </div>
+                      </div>
                     </form>
                 </div>
+            </div>
             </section>
         </div>
     );
