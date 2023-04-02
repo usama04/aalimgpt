@@ -15,21 +15,25 @@ const Register = () => {
     //const { setToken } = useContext(UserContext);
     const [errorMessages, setErrorMessages] = useState([]);
     const [successMessage, setSuccessMessage] = useState([]);
+    const [scholar, setScholar] = useState(false);
     // const navigate = useNavigate();
 
     const submitRegistration = async (e) => {
+      const requestbody = {
+        email: email,
+        first_name: firstName,
+        last_name: lastName,
+        scholar: scholar,
+        hashed_password: password,
+        confirm_password: confirmPassword
+      }
+      console.log(requestbody);
         const response = await fetch(`${process.env.REACT_APP_API_URL}/api/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-                email: email,
-                first_name: firstName,
-                last_name: lastName,
-                hashed_password: password,
-                confirm_password: confirmPassword
-            })
+            body: JSON.stringify(requestbody)
         });
         const data = await response.json();
         if (data.error) {
@@ -78,6 +82,13 @@ const Register = () => {
     <div className="form-group">
       <label htmlFor="confirmPassword">Confirm Password</label>
       <input type="password" className="form-control rounded-2" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} id="confirmPassword" placeholder="Confirm Password" />
+    </div>
+    <div className="checkbox mb-3">
+      <label className="form-radio-label">Are you a scholar?</label>
+      <input type="radio" className="form-radio-input m-2" value={scholar} onChange={(e) => setScholar(true)} id="scholarTrue" name="scholar" />
+      <label className="form-radio-label">Yes</label>
+      <input type="radio" className="form-radio-input m-2" value={scholar} onChange={(e) => setScholar(false)} id="scholarFalse" name="scholar" />
+      <label className="form-radio-label">No</label>
     </div>
     <button className="w-100 btn btn-lg btn-success" type="submit">Register</button>
   </form>

@@ -4,6 +4,7 @@ import pydantic as pyd
 
 class UserBase(pyd.BaseModel):
     email: str
+    scholar: bool = False
     
 class UserCreate(UserBase):
     first_name: str

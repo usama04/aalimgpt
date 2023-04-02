@@ -36,7 +36,7 @@ async def create_user(db: orm.Session, user: schemas.UserCreate):
         raise HTTPException(status_code=400, detail='Password is required')
     if password != confirm_password:
         raise HTTPException(status_code=400, detail='Passwords do not match')
-    db_user = models.User(email=user.email, hashed_password=ph.bcrypt.hash(password))
+    db_user = models.User(email=user.email, hashed_password=ph.bcrypt.hash(password), scholar=user.scholar)
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
