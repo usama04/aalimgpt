@@ -1,8 +1,8 @@
-"""Redo scholar as boolean
+"""Readded scholar field as nullable
 
-Revision ID: 7611ecea0ba1
-Revises: d80e6cd24d18
-Create Date: 2023-04-02 14:25:41.567854
+Revision ID: a6dbcc56b9b1
+Revises: ae7f11d56bce
+Create Date: 2023-04-02 06:48:21.276310
 
 """
 from alembic import op
@@ -10,8 +10,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '7611ecea0ba1'
-down_revision = 'd80e6cd24d18'
+revision = 'a6dbcc56b9b1'
+down_revision = 'ae7f11d56bce'
 branch_labels = None
 depends_on = None
 
