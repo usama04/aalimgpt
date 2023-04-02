@@ -69,7 +69,7 @@ const ChatMessage = ({ message, chatLog }) => {
                             setAnswerTrigger(true);
                             setResponseRating(-1);
                             }}><HandThumbsDown className="thumbs-down" /></button>
-                             {answerTrigger && <AltAnswer answerTrigger={answerTrigger} setAnswerTrigger={setAnswerTrigger} questionId={message.chat_id} responseRating={responseRating} />}
+                             {/*answerTrigger && <AltAnswer answerTrigger={answerTrigger} setAnswerTrigger={setAnswerTrigger} questionId={message.chat_id} responseRating={responseRating} />*/}
                     </div>
                     }
                 </div>
