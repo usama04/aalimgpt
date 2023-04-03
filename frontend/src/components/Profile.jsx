@@ -115,7 +115,7 @@ function Profile(props) {
                 <form className="form-group">
                     <label htmlFor="file" className="control-label">Profile Picture</label>
                     <input type="file" className="form-control rounded-2" id="file" name="file" aria-describedby="button-addon2" ref={inputRef} />
-                    <button className="btn btn-outline-primay btn-success mt-3" onClick={handleProfilePic} id="button-addon2">Upload</button>
+                    <button className="btn btn-outline-primay btn-success mt-3" onClick={handleProfilePic} id="button-addon2" type='button'>Upload</button>
                 </form>
                 <form className="form-group">
                     <label htmlFor="firstName" className="control-label">First Name</label>
@@ -131,9 +131,9 @@ function Profile(props) {
                     <label htmlFor="dob" className="control-label">Date of Birth</label>
                     <input type="text" className="form-control rounded-2" value={dob} onChange={(e) => setDob(e.target.value)} id="dob" />
                 </form>
-                <button className="w-100 btn btn-lg btn-success mt-3" onClick={handleSubmit}>Submit</button>
+                <button className="w-100 btn btn-lg btn-success mt-3" onClick={handleSubmit} type="button">Submit</button>
                 <div className='mt-3'>
-                    <button className="w-100 btn btn-lg btn-danger" onClick={delete_user}>Delete X</button>
+                    <button className="w-100 btn btn-lg btn-danger" onClick={delete_user} type="button">Delete X</button>
                 </div>
             </div>
         </div>

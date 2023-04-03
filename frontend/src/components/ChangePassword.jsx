@@ -50,7 +50,7 @@ const ChangePassword = (properties) => {
                         <label htmlFor="confirm_password">Confirm Password</label>
                         <input type="password" className="form-control rounded-2" id="confirm_password" placeholder="Confirm Password" onChange={(e) => setConfirmPassword(e.target.value)} value={confirm_password} required />
                     </div>
-                    <button className="btn btn-primary" onClick={handleSubmit}>Change Password</button>
+                    <button className="btn btn-primary" onClick={handleSubmit} type='button'>Change Password</button>
                 </form >
             </div>
         </div >
