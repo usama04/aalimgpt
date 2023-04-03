@@ -64,7 +64,7 @@ const Register = () => {
     <h1 className="h3 mb-3 fw-normal">Please Register</h1>
     <div className="form-group">
       <label htmlFor="firstName" className="control-label">First Name</label>
-      <input type="text" className="form-control rounded-2" value={firstName} onChange={(e) => setFirstName(e.target.value)} id="firstName" placeholder="First Name" />
+      <input type="text" className="form-control rounded-2" value={firstName} onChange={(e) => setFirstName(e.target.value)} id="firstName" placeholder="First Name" required />
       
     </div>
     <div className="form-group">
@@ -73,15 +73,15 @@ const Register = () => {
     </div>
     <div className="form-group">
       <label htmlFor="email">Email address</label>
-      <input type="email" className="form-control rounded-2" value={email} onChange={(e) => setEmail(e.target.value)} id="email" placeholder="Email address" />
+      <input type="email" className="form-control rounded-2" value={email} onChange={(e) => setEmail(e.target.value)} id="email" placeholder="Email address" required />
     </div>
     <div className="form-group">
       <label htmlFor="password">Password</label>
-      <input type="password" className="form-control rounded-2" value={password} onChange={(e) => setPassword(e.target.value)} id="password" placeholder="Password" />
+      <input type="password" className="form-control rounded-2" value={password} onChange={(e) => setPassword(e.target.value)} id="password" placeholder="Password" required />
     </div>
     <div className="form-group">
       <label htmlFor="confirmPassword">Confirm Password</label>
-      <input type="password" className="form-control rounded-2" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} id="confirmPassword" placeholder="Confirm Password" />
+      <input type="password" className="form-control rounded-2" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} id="confirmPassword" placeholder="Confirm Password" required />
     </div>
     <div className="checkbox mb-3">
       <label className="form-radio-label">Are you a scholar?</label>

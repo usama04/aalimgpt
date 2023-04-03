@@ -40,15 +40,15 @@ const ChangePassword = (properties) => {
                     <h1 className="h3 mb-3 fw-normal">Change your Password</h1>
                     <div className="form-group">
                         <label htmlFor="password">Old Password</label>
-                        <input type="password" className="form-control rounded-2" id="old_password" placeholder="Old Password" onChange={(e) => setOldPassword(e.target.value)} value={old_password} />
+                        <input type="password" className="form-control rounded-2" id="old_password" placeholder="Old Password" onChange={(e) => setOldPassword(e.target.value)} value={old_password} required />
                     </div>
                     <div className="form-group">
                         <label htmlFor="new_password">New Password</label>
-                        <input type="password" className="form-control rounded-2" id="new_password" placeholder="New Password" onChange={(e) => setNewPassword(e.target.value)} value={new_password} />
+                        <input type="password" className="form-control rounded-2" id="new_password" placeholder="New Password" onChange={(e) => setNewPassword(e.target.value)} value={new_password} required />
                     </div>
                     <div className="form-group">
                         <label htmlFor="confirm_password">Confirm Password</label>
-                        <input type="password" className="form-control rounded-2" id="confirm_password" placeholder="Confirm Password" onChange={(e) => setConfirmPassword(e.target.value)} value={confirm_password} />
+                        <input type="password" className="form-control rounded-2" id="confirm_password" placeholder="Confirm Password" onChange={(e) => setConfirmPassword(e.target.value)} value={confirm_password} required />
                     </div>
                     <button className="btn btn-primary" onClick={handleSubmit}>Change Password</button>
                 </form >
