@@ -95,13 +95,13 @@ const Sidemenu = ({ chatLog, setChatLog, toggleSideMenu }) => {
                 New Chat
             </div>
             <div>
-            {prompts && prompts.map(prompt =>
+            {/*prompts && prompts.map(prompt =>
             (
                 <div className="sidemenu__history" key={prompt}>
                     <span onClick={() => get_chat_history({id: prompt[1]})}>{prompt[0]}</span><span onClick={() => delete_chat_history({id: prompt[1]})} id="delete"><Trash /></span>
                 </div>
             )
-            )}
+            )*/}
             </div>
         </aside>
     )
