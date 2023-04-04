@@ -31,8 +31,15 @@ const Sidemenu = ({ chatLog, setChatLog, toggleSideMenu }) => {
                 // if (message !== undefined && message.length > 5) {
                 //     return [message.toString().slice(0, 20), item.id]
                 // }
-                const promptList = JSON.parse(item.prompt);
-                const messages = promptList.map(prompt => prompt.message);
+                let decode;
+                let promptList;
+                if (typeof(item.prompt) === 'string') {
+                    promptList = JSON.parse(item.prompt);
+                    decode = JSON.parse(promptList)
+                } else {
+                    decode = JSON.parse(item.prompt)
+                }
+                const messages = decode.map(prompt => prompt.message);
                 const filteredMessages = messages.filter(message => message !== undefined && message.length > 5);
                 if (filteredMessages.length > 0) {
                     return [filteredMessages[0].toString().slice(0, 20), item.id];
@@ -95,13 +102,13 @@ const Sidemenu = ({ chatLog, setChatLog, toggleSideMenu }) => {
                 New Chat
             </div>
             <div>
-            {/*prompts && prompts.map(prompt =>
+            {prompts && prompts.map(prompt =>
             (
                 <div className="sidemenu__history" key={prompt}>
                     <span onClick={() => get_chat_history({id: prompt[1]})}>{prompt[0]}</span><span onClick={() => delete_chat_history({id: prompt[1]})} id="delete"><Trash /></span>
                 </div>
             )
-            )*/}
+            )}
             </div>
         </aside>
     )
