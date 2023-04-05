@@ -31,8 +31,7 @@ const Register = () => {
         hashed_password: password,
         confirm_password: confirmPassword
       }
-      console.log(requestbody);
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/register`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
