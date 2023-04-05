@@ -112,11 +112,13 @@ function Profile(props) {
                 <button className="btn btn-danger btn-close" onClick={() => props.setTrigger(false)}></button>
                 {props.children}
                 <h1 className="h3 mb-3 fw-normal">Edit Profile</h1>
+                {/*}
                 <form className="form-group">
                     <label htmlFor="file" className="control-label">Profile Picture</label>
                     <input type="file" className="form-control rounded-2" id="file" name="file" aria-describedby="button-addon2" ref={inputRef} />
                     <button className="btn btn-outline-primay btn-success mt-3" onClick={handleProfilePic} id="button-addon2" type='button'>Upload</button>
                 </form>
+                */}
                 <form className="form-group">
                     <label htmlFor="firstName" className="control-label">First Name</label>
                     <input type="text" className="form-control rounded-2" value={firstName} onChange={(e) => setFirstName(e.target.value)} id="firstName" />
