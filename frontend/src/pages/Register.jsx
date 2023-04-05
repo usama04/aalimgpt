@@ -5,6 +5,8 @@ import { ErrorMessage } from '../components/ErrorMessage';
 import { SuccessMessage } from '../components/SuccessMessage';
 //import { useNavigate } from 'react-router-dom';
 import { Nav } from '../components/Nav';
+import { PrivacyPolicy } from '../components/PrivacyPolicy';
+import { TermAndConditions } from '../components/TermAndConditions';
 
 const Register = () => {
     const [firstName, setFirstName] = useState('');
@@ -18,6 +20,8 @@ const Register = () => {
     const [scholar, setScholar] = useState(false);
     const [religion, setReligion] = useState('');
     const [location, setLocation] = useState('');
+    const [privacyTrigger, setPrivacyTrigger] = useState(false);
+    const [termsTrigger, setTermsTrigger] = useState(false);
     // const navigate = useNavigate();
 
     const submitRegistration = async (e) => {
@@ -77,6 +81,8 @@ const Register = () => {
       <label htmlFor="email">Email address</label>
       <input type="email" className="form-control rounded-2" value={email} onChange={(e) => setEmail(e.target.value)} id="email" placeholder="Email address" required/>
     </div>
+    <TermAndConditions termsTrigger={termsTrigger} setTermsTrigger={setTermsTrigger} />
+    <PrivacyPolicy privacyTrigger={privacyTrigger} setPrivacyTrigger={setPrivacyTrigger} />
     <div className="form-group">
       <label htmlFor="religion">Religion</label>
       {/* Choose religion from a dropdown */}
@@ -117,6 +123,10 @@ const Register = () => {
       <label className="form-radio-label">Yes</label>
       <input type="radio" className="form-radio-input m-2" value={scholar} onChange={(e) => setScholar(false)} id="scholarFalse" name="scholar" />
       <label className="form-radio-label">No</label>
+    </div>
+    <div className="checkbox mb-3">
+    <input type="checkbox" className="form-check-input m-2" id="terms" name="terms" required />
+      <label className="checkbox-label">By clicking Register, you agree to the <span onClick={() => setTermsTrigger(true)} className="text-primary">terms and conditions</span> and <span onClick={() => setPrivacyTrigger(true)} className="text-primary">privacy policy</span>.</label>
     </div>
     <button className="w-100 btn btn-lg btn-success" type="submit">Register</button>
   </form>

@@ -282,4 +282,12 @@
   background-color: #888;
 }
 
+.serviceTerms {
+  width: auto;
+  height: 80%;
+  justify-content: left;
+  align-items: left;
+  position: absolute;
+  overflow-y: scroll;
+}
 
