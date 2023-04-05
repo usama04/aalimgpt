@@ -125,7 +125,6 @@ const Register = () => {
       <label className="form-radio-label">No</label>
     </div>
     <div className="checkbox mb-3">
-    <input type="checkbox" className="form-check-input m-2" id="terms" name="terms" required />
       <label className="checkbox-label">By clicking Register, you agree to the <span onClick={() => setTermsTrigger(true)} className="text-primary">terms and conditions</span> and <span onClick={() => setPrivacyTrigger(true)} className="text-primary">privacy policy</span>.</label>
     </div>
     <button className="w-100 btn btn-lg btn-success" type="submit">Register</button>
