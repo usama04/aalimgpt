@@ -103,12 +103,12 @@ function Profile(props) {
     return (props.trigger) ? (
         <div className='popup'>
             <div className="popup-inner">
-                {errorMessages.map((message, index) => {
+                {/*errorMessages.map((message, index) => {
                     return <ErrorMessage key={index} message={message} />
                 })}
                 {successMessages.map((message, index) => {
                     return <SuccessMessage key={index} message={message} />
-                })}
+                })*/}
                 <button className="btn btn-danger btn-close" onClick={() => props.setTrigger(false)}></button>
                 {props.children}
                 <h1 className="h3 mb-3 fw-normal">Edit Profile</h1>
@@ -124,14 +124,14 @@ function Profile(props) {
                     <input type="text" className="form-control rounded-2" value={lastName} onChange={(e) => setLastName(e.target.value)} id="lastName" />
                 </form>
                 <form>
-                    <label htmlFor="bio" className="control-label">Bio</label>
+                    <label htmlFor="bio" className="control-label">Religion</label>
                     <input type="text" className="form-control rounded-2" value={bio} onChange={(e) => setBio(e.target.value)} id="bio" />
                     <label htmlFor="location" className="control-label">Location</label>
                     <input type="text" className="form-control rounded-2" value={location} onChange={(e) => setLocation(e.target.value)} id="location" />
-                    <label htmlFor="dob" className="control-label">Date of Birth</label>
-                    <input type="text" className="form-control rounded-2" value={dob} onChange={(e) => setDob(e.target.value)} id="dob" />
+                    {/*<label htmlFor="dob" className="control-label">Date of Birth</label>
+                    <input type="text" className="form-control rounded-2" value={dob} onChange={(e) => setDob(e.target.value)} id="dob" />*/}
                 </form>
-                <button className="w-100 btn btn-lg btn-success mt-3" onClick={handleSubmit} type="button">Submit</button>
+                <button className="w-100 btn btn-lg btn-success mt-3" onClick={handleSubmit} type="button">Update</button>
                 <div className='mt-3'>
                     <button className="w-100 btn btn-lg btn-danger" onClick={delete_user} type="button">Delete X</button>
                 </div>

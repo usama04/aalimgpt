@@ -32,7 +32,7 @@ async def create_user(user: schemas.UserCreate, db: orm.Session = Depends(servic
     if db_user and not db_user.is_active:
         return await services.send_verification_email(db, db_user)
     user_obj = await services.create_user(db, user)
-    profile_obj = await services.create_user_profile(db, schemas.ProfileCreate(), user_obj.id, first_name=user.first_name, last_name=user.last_name)
+    profile_obj = await services.create_user_profile(db, schemas.ProfileCreate(), user_obj.id, first_name=user.first_name, last_name=user.last_name, bio=user.bio, location=user.location)
     return await services.send_verification_email(db, user_obj)
     #return await services.create_token(db, user_obj)
     

@@ -77,15 +77,24 @@ const Sidemenu = ({ chatLog, setChatLog, toggleSideMenu }) => {
         const bot_response_dict = JSON.parse(bot_response)
         const promptDict = JSON.parse(prompt);
         if (promptDict !== null) {
-            const messages = promptDict.map((message) => ({
-                role: message.role,
-                message: message.message,
-            }));
-            const newAssistantMessage = { role: bot_response_dict.user, message: bot_response_dict.message };
-            setChatLog([...messages, newAssistantMessage]);
+            if (Array.isArray(promptDict)) {
+                const messages = promptDict.map((message) => ({
+                    role: message.role,
+                    message: message.message,
+                }));
+                const newAssistantMessage = { role: bot_response_dict.user, message: bot_response_dict.message };
+                setChatLog([...messages, newAssistantMessage]);
+            } else {
+                const messages = JSON.parse(promptDict).map((message) => ({
+                    role: message.role,
+                    message: message.message,
+                }));
+                const newAssistantMessage = { role: bot_response_dict.user, message: bot_response_dict.message };
+                setChatLog([...messages, newAssistantMessage]);
+            }
+            
         } else {
-            const newAssistantMessage = { role: bot_response_dict.role, message: bot_response_dict.message };
-            setChatLog([newAssistantMessage]);
+            
         }
 
     }

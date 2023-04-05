@@ -16,6 +16,8 @@ const Register = () => {
     const [errorMessages, setErrorMessages] = useState([]);
     const [successMessage, setSuccessMessage] = useState([]);
     const [scholar, setScholar] = useState(false);
+    const [religion, setReligion] = useState('');
+    const [location, setLocation] = useState('');
     // const navigate = useNavigate();
 
     const submitRegistration = async (e) => {
@@ -24,6 +26,8 @@ const Register = () => {
         first_name: firstName,
         last_name: lastName,
         scholar: scholar,
+        bio: religion,
+        location: location,
         hashed_password: password,
         confirm_password: confirmPassword
       }
@@ -64,8 +68,7 @@ const Register = () => {
     <h1 className="h3 mb-3 fw-normal">Please Register</h1>
     <div className="form-group">
       <label htmlFor="firstName" className="control-label">First Name</label>
-      <input type="text" className="form-control rounded-2" value={firstName} onChange={(e) => setFirstName(e.target.value)} id="firstName" placeholder="First Name" />
-      
+      <input type="text" className="form-control rounded-2" value={firstName} onChange={(e) => setFirstName(e.target.value)} id="firstName" placeholder="First Name" required/>
     </div>
     <div className="form-group">
       <label htmlFor="lastName">Last Name</label>
@@ -73,15 +76,41 @@ const Register = () => {
     </div>
     <div className="form-group">
       <label htmlFor="email">Email address</label>
-      <input type="email" className="form-control rounded-2" value={email} onChange={(e) => setEmail(e.target.value)} id="email" placeholder="Email address" />
+      <input type="email" className="form-control rounded-2" value={email} onChange={(e) => setEmail(e.target.value)} id="email" placeholder="Email address" required/>
+    </div>
+    <div className="form-group">
+      <label htmlFor="religion">Religion</label>
+      {/* Choose religion from a dropdown */}
+      <div className="dropdown">
+        <button className="btn btn-secondary dropdown-toggle w-100" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+          {religion}
+        </button>
+        <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+          <li onClick={(e) => setReligion("Athiesm")} value="Athiesm" className="dropdown-item">Athiesm / Agnostic</li>
+          <li onClick={(e) => setReligion("Christianity")} value="Christianity" className="dropdown-item">Christianity</li>
+          <li onClick={(e) => setReligion("Islam (no sect)")} value="Islam no sect" className="dropdown-item">Islam (no sect)</li>
+          <li onClick={(e) => setReligion("Islam (Sunni, all sects)")} value="Sunni" className="dropdown-item">Islam (Sunni, all sects)</li>
+          <li onClick={(e) => setReligion("Islam (Shia, all sects)")} value="Shia" className="dropdown-item">Islam (Shia, all sects)</li>
+          <li onClick={(e) => setReligion("Judaism")} value="Judaism" className="dropdown-item">Judaism</li>
+          <li onClick={(e) => setReligion("Hinduism")} value="Hinduism" className="dropdown-item">Hinduism</li>
+          <li onClick={(e) => setReligion("Buddhism")} value="Buddhism" className="dropdown-item">Buddhism</li>
+          <li onClick={(e) => setReligion("Sikhism")} value="Sikhism" className="dropdown-item">Sikhism</li>
+          <li onClick={(e) => setReligion("Qadiani")} value="Qadiani" className="dropdown-item">Qadiani</li>
+          <li onClick={(e) => setReligion("Other")} value="other" className="dropdown-item">Other</li>
+        </ul>
+      </div>
+    </div>
+    <div className="form-group">
+      <label htmlFor="location">Country</label>
+      <input type="text" className="form-control rounded-2" value={location} onChange={(e) => setLocation(e.target.value)} id="location" placeholder="Country" />
     </div>
     <div className="form-group">
       <label htmlFor="password">Password</label>
-      <input type="password" className="form-control rounded-2" value={password} onChange={(e) => setPassword(e.target.value)} id="password" placeholder="Password" />
+      <input type="password" className="form-control rounded-2" value={password} onChange={(e) => setPassword(e.target.value)} id="password" placeholder="Password" required/>
     </div>
     <div className="form-group">
       <label htmlFor="confirmPassword">Confirm Password</label>
-      <input type="password" className="form-control rounded-2" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} id="confirmPassword" placeholder="Confirm Password" />
+      <input type="password" className="form-control rounded-2" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} id="confirmPassword" placeholder="Confirm Password" required/>
     </div>
     <div className="checkbox mb-3">
       <label className="form-radio-label">Are you a scholar?</label>

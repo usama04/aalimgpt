@@ -42,12 +42,12 @@ async def create_user(db: orm.Session, user: schemas.UserCreate):
     db.refresh(db_user)
     return db_user
 
-async def create_user_profile(db: orm.Session, profile: schemas.ProfileCreate, user_id: int, first_name: str, last_name: str):
+async def create_user_profile(db: orm.Session, profile: schemas.ProfileCreate, user_id: int, first_name: str, last_name: str, bio: str, location: str):
     db_profile = models.Profile(
         first_name=first_name,
         last_name=last_name,
-        bio=profile.bio, 
-        location=profile.location, 
+        bio=bio, 
+        location=location, 
         birth_date=profile.birth_date, 
         profile_image=profile.profile_image, user_id=user_id)
     db.add(db_profile)

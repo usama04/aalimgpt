@@ -9,6 +9,8 @@ class UserBase(pyd.BaseModel):
 class UserCreate(UserBase):
     first_name: str
     last_name: str
+    bio: str
+    location: str
     hashed_password: str
     confirm_password: str
     
