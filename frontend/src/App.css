@@ -202,7 +202,7 @@
 .popup {
   position: absolute;
   width: 40%;
-  height: 63%;
+  height: 50%;
   background-color: rgba(0, 0, 0, 0.9);
   display: flex;
   justify-content: center;
@@ -289,5 +289,7 @@
   align-items: left;
   position: absolute;
   overflow-y: scroll;
+  scrollbar-width: thin;
+  scrollbar-color: #888 #202123;
 }
 
