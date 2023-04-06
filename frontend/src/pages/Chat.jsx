@@ -13,7 +13,7 @@ const Chat = () => {
     const [fullChatLog, setFullChatLog] = useState([]);
     const token = localStorage.getItem('usertoken');
     const navigate = useNavigate();
-    const [toggleSideMenu, setToggleSideMenu] = useState(true);
+    const [toggleSideMenu, setToggleSideMenu] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
