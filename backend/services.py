@@ -189,7 +189,7 @@ async def verify_email(db: orm.Session, token: str):
             raise HTTPException(status_code=400, detail='Token expired')
         
         if user.scholar == True:
-            mail = "Welcome to AalimGPT, your email has been verified successfully. We will however contact you shortly and verify your credentials before you can start using our services."
+            mail = "Welcome to AalimGPT, your email has been verified successfully. Since you selected Scholar, Scholars are in the driving seat of this project and have extra priviledges on our platform. We will therefore, contact you shortly and verify your credentials and manually activate your account before you can start using our services."
             subject = "Email Verification Successful"
             await send_email(user.email, subject, mail)
             user.is_active = False
