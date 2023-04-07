@@ -30,7 +30,7 @@ const PrivacyPolicy = (props) => {
                     We may update this Privacy Policy from time to time by posting a new version on our website. You should review this Privacy Policy periodically for changes.
 
                     <h4>Contact us</h4>
-                    If you have any questions or concerns about our Privacy Policy, please <a href="mailto:admin@cogniz.tech">contact us</a>.
+                    If you have any questions or concerns about our Privacy Policy, please <a href="mailto:admin@aalimgpt.app">contact us</a>.
                 </div>
             </div>
         </div>
