@@ -35,7 +35,7 @@ const TermAndConditions = (props) => {
                     We may update these Terms from time to time by posting a new version on our website. You should review these Terms periodically for changes.
 
                     <h4>Contact us</h4>
-                    If you have any questions or concerns about these Terms or our service, please <a href="mailto:admin@cogniz.tech">contact us</a>.
+                    If you have any questions or concerns about these Terms or our service, please <a href="mailto:admin@aalimgpt.app">contact us</a>.
                 </div>
             </div>
         </div>
