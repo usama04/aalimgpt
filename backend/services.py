@@ -295,9 +295,9 @@ async def provide_alternate_answer(db: orm.Session = Depends(get_db), user: sche
     
 async def mufti_gpt3(request: Request, db: orm.Session = Depends(get_db), user: schemas.User = Depends(get_current_user)):
     received = await request.json()
-    print(received)
+    #print(received)
     messages = received["messages"]
-    print(messages)
+    #print(messages)
     prompt = "You are a well versed Islamic Scholar who can be asked questions from and he can give answers according to Quran and Hadees with proper references with international numbering of the books of Ahadis. Respond in language question was asked in. Make sure all answers have evidence with it from Quran and Hadees. Do NOT be an apologetic and answer with facts and dont shy away from objectively stating something wrong as wrong.\n\n"
     for message in messages:
         if message["role"] == "questioner":
@@ -320,7 +320,7 @@ async def mufti_gpt3(request: Request, db: orm.Session = Depends(get_db), user: 
     response = openai.Completion.create(
         engine=settings.OPENAI_CHAT_MODEL,
         prompt=prompt + "\nScholar:",
-        temperature=0.4,
+        temperature=0.5,
         max_tokens=1000,
         top_p=1,
         frequency_penalty=0,
