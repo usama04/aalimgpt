@@ -1,4 +1,4 @@
-from fastapi import Depends, HTTPException, UploadFile, File
+from fastapi import Depends, HTTPException, UploadFile, File, Request, status
 import fastapi.security as security
 from databases import database as db
 import sqlalchemy.orm as orm
@@ -10,7 +10,8 @@ import jwt
 import settings
 from typing import List, Dict
 from fastapi_mail import FastMail, MessageSchema, MessageType
-
+import openai
+openai.api_key = settings.OPENAI_API_KEY
 
 def create_database():
     return db.Base.metadata.create_all(bind=db.engine)
@@ -290,4 +291,43 @@ async def provide_alternate_answer(db: orm.Session = Depends(get_db), user: sche
     db.commit()
     db.refresh(chat_obj)
     return dict(message='Alternate answer provided successfully', answer=chat_obj.alt_response)
+    
+    
+async def mufti_gpt3(request: Request, db: orm.Session = Depends(get_db), user: schemas.User = Depends(get_current_user)):
+    received = await request.json()
+    print(received)
+    messages = received["messages"]
+    print(messages)
+    prompt = "You are a well versed Islamic Scholar who can be asked questions from and he can give answers according to Quran and Hadees with proper references with international numbering of the books of Ahadis. Respond in language question was asked in. Make sure all answers have evidence with it from Quran and Hadees. Do NOT be an apologetic and answer with facts and dont shy away from objectively stating something wrong as wrong.\n\n"
+    for message in messages:
+        if message["role"] == "questioner":
+            try:
+                mes = message["message"]
+            except KeyError:
+                mes = message["content"]
+            except:
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid message format")
+            prompt += "Questioner: " + mes + "\n"
+        else:
+            try:
+                mes = message["message"]
+            except KeyError:
+                mes = message["content"]
+            except:
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid message format")
+            prompt += "Scholar: " + mes + "\n"
+    print(prompt)
+    response = openai.Completion.create(
+        engine=settings.OPENAI_CHAT_MODEL,
+        prompt=prompt + "\nScholar:",
+        temperature=0.4,
+        max_tokens=1000,
+        top_p=1,
+        frequency_penalty=0,
+        presence_penalty=0.6
+    )
+    ret_response = {"user": "assistant", "message": response.choices[0].text}
+    chat = await save_chat_response(db, user, prompt=messages, generated_response=ret_response)
+    ret_response["chat_id"] = chat.id
+    return ret_response   
     

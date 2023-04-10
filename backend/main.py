@@ -6,8 +6,9 @@ import settings
 import signal
 
 async def main():
-    #await run_api()
+    await run_api()
     ## New Stuff
+    """
     command = [
         "hypercorn",
         "api:app",
@@ -25,6 +26,7 @@ async def main():
         asyncio.get_event_loop().add_signal_handler(getattr(signal, signame), lambda: asyncio.ensure_future(cleanup()))
 
     await process.wait()
+    """
 
 if __name__ == "__main__":
     event_loop = asyncio.get_event_loop()
