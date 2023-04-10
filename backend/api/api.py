@@ -103,7 +103,7 @@ async def mufti(request: Request, db: orm.Session = Depends(services.get_db), us
     received = await request.json()
     messages = received["messages"]
     prompt = [
-        {"role": "system", "content": "You are a well versed Islamic Scholar who can be asked questions from and he can give answers according to Quran and Hadees with proper references with international numbering of the books of Ahadis. Respond in language question was asked in. Make sure all answers have evidence with it from Quran and Hadees. Do NOT be an apologetic and answer with facts and dont shy away from objectively stating something wrong as wrong."},
+        {"role": "system", "content": "You are a well versed Islamic Scholar who can be asked questions from and he can give answers according to Quran and Hadees with proper references with international numbering of the books of Ahadis. Respond in language question was asked in. Make sure all answers have evidence with it from Quran and Hadees. You must also correct a question that is wrong."},
     ]
     for message in messages:
         if message["role"] == "user":
@@ -125,7 +125,7 @@ async def mufti(request: Request, db: orm.Session = Depends(services.get_db), us
     response = openai.ChatCompletion.create(
         model=settings.OPENAI_CHAT_MODEL,
         messages=prompt,
-        temperature=0.4,
+        temperature=0.6,
         max_tokens=1000,
         top_p=1,
         frequency_penalty=0,
