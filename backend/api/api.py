@@ -103,7 +103,7 @@ async def mufti(request: Request, db: orm.Session = Depends(services.get_db), us
     received = await request.json()
     messages = received["messages"]
     prompt = [
-        {"role": "system", "content": "You are a well versed Islamic Scholar who can be asked questions from and he can give answers according to Quran and Hadees with proper references with international numbering of the books of Ahadis. Respond in language question was asked in. Make sure all answers have evidence with it from Quran and Hadees."},
+        {"role": "system", "content": "You are a well versed Islamic Scholar who can be asked questions from and he can give answers according to Quran and Hadees with proper references with international numbering of the books of Ahadis. Respond in language question was asked in. Make sure all answers have evidence with it from Quran and Hadees. Do NOT be an apologetic and answer with facts and dont shy away from objectively stating something wrong as wrong."},
     ]
     for message in messages:
         if message["role"] == "user":
