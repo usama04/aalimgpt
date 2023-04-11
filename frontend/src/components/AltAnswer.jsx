@@ -38,7 +38,7 @@ const AltAnswer = (props) => {
                 <h1 className="h3 mb-3 fw-normal">Add an alternative answer</h1>
                 <div className="form-group">
                     <label htmlFor="altAnswer">Alternative Answer</label>
-                    <textarea className="form-control rounded-2" id="altAnswer" placeholder="Alternative Answer" onChange={(e) => setAltAnswer(e.target.value)} value={altAnswer} />
+                    <textarea className="form-control rounded-2" id="altAnswer" placeholder="Alternative Answer" onChange={(e) => setAltAnswer(e.target.value)} value={altAnswer} rows={8} />
                 </div>
                 <button className="btn btn-primary" onClick={handleSubmit}>Add Alternative Answer</button>
             </form>

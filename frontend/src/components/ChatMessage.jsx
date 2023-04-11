@@ -29,15 +29,15 @@ const ChatMessage = ({ message, chatLog }) => {
             if (data.profile_image === null) {
                 setProfileImage('student.png')
             } else {
-            setProfileImage(data.profile_image);
+                setProfileImage(data.profile_image);
             }
         }
     }
 
     useEffect(() => {
         for (let i = 0; i < chatLog.length; i++) {
-                message = chatLog[i]
-                setProfilePicture()
+            message = chatLog[i]
+            setProfilePicture()
         }
     }, [])
 
@@ -47,11 +47,11 @@ const ChatMessage = ({ message, chatLog }) => {
             {successMessages.length > 0 && <SuccessMessage message={successMessages} />}
             <div className="chat-message-center">
                 {(message.user === "assistant" || message.role === "assistant") && <img className='avatar chatgpt' src="AIImam.png" alt="Mufti" />}
-                {(message.user === "questioner" || message.role === "questioner") && <img className='avatar' src={ profile_image } alt="questioner" onClick={() => setTrigger(true)} />}
+                {(message.user === "questioner" || message.role === "questioner") && <img className='avatar' src={profile_image} alt="questioner" onClick={() => setTrigger(true)} />}
                 <Profile trigger={trigger} setTrigger={setTrigger} />
                 <div className="message">
                     {message.message}
-                    {(message.user === "assistant" || message.role === "assistant" ) && <div className="thumbs">
+                    {(message.user === "assistant" || message.role === "assistant") && <div className="thumbs">
                         <button onClick={() => {
                             setResponseRating(1);
                             const response = fetch(`${process.env.REACT_APP_API_URL}/api/chat-history/${message.chat_id}`, {
@@ -64,12 +64,31 @@ const ChatMessage = ({ message, chatLog }) => {
                                     response_rating: responseRating
                                 })
                             });
-                            }}><HandThumbsUp className="thumbs-up" /></button>
+                            if (response.ok) {
+                                setSuccessMessages("Your response has been recorded");
+                            } else {
+                                setErrorMessages("There was an error recording your response");
+                            }
+                        }}><HandThumbsUp className="thumbs-up" /></button>
                         <button onClick={() => {
-                            setAnswerTrigger(true);
                             setResponseRating(-1);
-                            }}><HandThumbsDown className="thumbs-down" /></button>
-                             {/*answerTrigger && <AltAnswer answerTrigger={answerTrigger} setAnswerTrigger={setAnswerTrigger} questionId={message.chat_id} responseRating={responseRating} />*/}
+                            const ifScholarTriggerAnswer = async () => {
+                                const response = await fetch(`${process.env.REACT_APP_API_URL}/api/users/me`, {
+                                    method: 'GET',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'Authorization': `Bearer ${localStorage.getItem('usertoken')}`
+                                    }
+                                });
+                                const data = await response.json();
+                                if (data.scholar === true) {
+                                    setAnswerTrigger(true);
+                                }
+                            }
+                            ifScholarTriggerAnswer();
+                        }
+                        }><HandThumbsDown className="thumbs-down" /></button>
+                        {answerTrigger && <AltAnswer answerTrigger={answerTrigger} setAnswerTrigger={setAnswerTrigger} questionId={message.chat_id} responseRating={responseRating} />}
                     </div>
                     }
                 </div>

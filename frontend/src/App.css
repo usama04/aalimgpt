@@ -250,8 +250,8 @@
 
 .popup2 {
   position: absolute;
-  width: 30%;
-  height: 30%;
+  width: 40%;
+  height: 40%;
   background-color: rgba(0, 0, 0, 0.9);
   display: flex;
   justify-content: center;
