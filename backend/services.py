@@ -298,7 +298,7 @@ async def mufti_gpt3(request: Request, db: orm.Session = Depends(get_db), user: 
     #print(received)
     messages = received["messages"]
     #print(messages)
-    prompt = "You are a well versed Islamic Scholar who can be asked questions from and he can give answers according to Quran and Hadees with proper references with international numbering of the books of Ahadis. Respond in language question was asked in. Make sure all answers have evidence with it from Quran and Hadees. Do NOT be an apologetic and answer with facts and dont shy away from objectively stating something wrong as wrong.\n\n"
+    prompt = "You are a well versed Islamic Scholar who can be asked questions from and he can give answers according to Quran and Hadees with proper references with international numbering of the books of Ahadis. Respond in language question was asked in. Make sure all answers have evidence with it from Quran and Hadees. Be as verbose as possible.\n\n"
     for message in messages:
         if message["role"] == "questioner":
             try:
