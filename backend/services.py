@@ -11,6 +11,9 @@ import settings
 from typing import List, Dict
 from fastapi_mail import FastMail, MessageSchema, MessageType
 import openai
+from api.aalim2 import (AgentFinish, agent, agent_executor, custom_prompt,
+                    llm_chain, output_parser, search, tool_names,
+                    tools)
 openai.api_key = settings.OPENAI_API_KEY
 
 def create_database():
@@ -331,3 +334,12 @@ async def mufti_gpt3(request: Request, db: orm.Session = Depends(get_db), user: 
     ret_response["chat_id"] = chat.id
     return ret_response   
     
+async def mufti_agent(request: Request, db: orm.Session = Depends(get_db), user: schemas.User = Depends(get_current_user)):
+    recieved = await request.json()
+    messages = recieved["messages"]
+    messages = [message["message"] for message in messages]
+    agent_output = agent_executor.run(messages)
+    #return await {"user": "assistant", "message": agent_output}
+    chat = await save_chat_response(db, user, prompt=messages, generated_response=agent_output)
+    ret_response = {"user": "assistant", "message": agent_output, "chat_id": chat.id}
+    return ret_response

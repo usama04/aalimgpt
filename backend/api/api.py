@@ -1,16 +1,18 @@
-from fastapi import FastAPI, Request, Depends, HTTPException, status, UploadFile, File, Form
-from fastapi.middleware.cors import CORSMiddleware
-from api.responses import CustomJSONResponse
-import fastapi.security as security
-import sqlalchemy.orm as orm
-import services as services
-import databases.schemas as schemas
-import databases.models as models
-import openai
-import settings
-import passlib.hash as ph
 import os
 
+import databases.models as models
+import databases.schemas as schemas
+import fastapi.security as security
+import openai
+import passlib.hash as ph
+import services as services
+import settings
+import sqlalchemy.orm as orm
+from api.responses import CustomJSONResponse
+from fastapi import (Depends, FastAPI, File, Form, HTTPException, Request,
+                     UploadFile, WebSocket, status, WebSocketDisconnect)
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import HTMLResponse
 
 openai.api_key = settings.OPENAI_API_KEY
 
@@ -155,3 +157,8 @@ async def delete_chat_history_by_id(chat_id: int, db: orm.Session = Depends(serv
 @app.put("/api/chat-history/{chat_id}")
 async def provide_alternate_answer(chat_id: int, alternate_answer: schemas.AltChatResponse, db: orm.Session = Depends(services.get_db), user: schemas.User = Depends(services.get_current_user)):
     return await services.provide_alternate_answer(db, user, chat_id, alternate_answer)
+
+@app.post("/api/chatbot")
+async def aalimChat(request: Request, db: orm.Session = Depends(services.get_db), user: schemas.User = Depends(services.get_current_user)):
+    return await services.mufti_agent(request, db, user)
+        
