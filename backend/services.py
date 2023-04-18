@@ -13,7 +13,7 @@ from fastapi_mail import FastMail, MessageSchema, MessageType
 import openai
 from api.aalim2 import (AgentFinish, agent, agent_executor, custom_prompt,
                     llm_chain, output_parser, search, tool_names,
-                    tools)
+                    tools, async_agent_executor)
 openai.api_key = settings.OPENAI_API_KEY
 
 def create_database():
@@ -319,7 +319,7 @@ async def mufti_gpt3(request: Request, db: orm.Session = Depends(get_db), user: 
             except:
                 raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid message format")
             prompt += "Scholar: " + mes + "\n"
-    print(prompt)
+    #print(prompt)
     response = openai.Completion.create(
         engine=settings.OPENAI_CHAT_MODEL,
         prompt=prompt + "\nScholar:",
@@ -337,9 +337,28 @@ async def mufti_gpt3(request: Request, db: orm.Session = Depends(get_db), user: 
 async def mufti_agent(request: Request, db: orm.Session = Depends(get_db), user: schemas.User = Depends(get_current_user)):
     recieved = await request.json()
     messages = recieved["messages"]
-    messages = [message["message"] for message in messages]
-    agent_output = agent_executor.run(messages)
-    #return await {"user": "assistant", "message": agent_output}
+    prompt = "\n"
+    for message in messages:
+        if message["role"] == "questioner":
+            try:
+                mes = message["message"]
+            except KeyError:
+                mes = message["content"]
+            except:
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid message format")
+            prompt += "Questioner: " + mes + "\n"
+        else:
+            try:
+                mes = message["message"]
+            except KeyError:
+                mes = message["content"]
+            except:
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid message format")
+            prompt += "Scholar: " + mes + "\n"
+    #agent_output = agent_executor.run(prompt)
+    agent_output = await async_agent_executor(prompt)
+    if "Scholar:" in agent_output[:8]:
+        agent_output = agent_output.split("Scholar: ")[1]
     chat = await save_chat_response(db, user, prompt=messages, generated_response=agent_output)
     ret_response = {"user": "assistant", "message": agent_output, "chat_id": chat.id}
     return ret_response

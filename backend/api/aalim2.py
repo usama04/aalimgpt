@@ -1,5 +1,5 @@
 from dotenv import load_dotenv
-from langchain.agents import Tool, AgentExecutor, LLMSingleActionAgent, AgentOutputParser
+from langchain.agents import Tool, AgentExecutor, LLMSingleActionAgent, AgentOutputParser, load_tools
 from langchain.prompts import BaseChatPromptTemplate
 from langchain import SerpAPIWrapper, LLMChain
 from langchain.chat_models import ChatOpenAI
@@ -7,6 +7,11 @@ from typing import List, Union
 from langchain.schema import AgentAction, AgentFinish, HumanMessage
 from langchain.memory import ConversationBufferWindowMemory
 import re
+import asyncio
+from langchain.callbacks.stdout import StdOutCallbackHandler
+from langchain.callbacks.base import CallbackManager
+from langchain.callbacks.tracers import LangChainTracer
+from aiohttp import ClientSession
 
 load_dotenv(dotenv_path="../.env")
 
@@ -17,7 +22,7 @@ search = SerpAPIWrapper()
 tools = [
     Tool(
         name="search",
-        func=search.run,
+        func=search.arun,
         description="Searches the web for Islamic websites to answer queries",
     ),
 ]
@@ -43,7 +48,9 @@ Final Answer: A verbose final answer to the original input question which also c
 
 Begin! Remember to be as authentic as possible as you are an Islamic Scholar! Final Answer MUST be verbose and MUST include Quran and Sunnah references.
 
-Questioner: {input}
+Chat History: 
+{input}
+
 {agent_scratchpad}
 """
 
@@ -134,3 +141,18 @@ agent_executor = AgentExecutor.from_agent_and_tools(agent=agent,
                                                     verbose=True, 
                                                     #memory=memory
                                                     )
+
+async def async_agent_executor(inputs):
+    manager = CallbackManager([StdOutCallbackHandler()])
+    llm = ChatOpenAI(temperature=0, callback_manager=manager)
+    llm_chain = LLMChain(llm=llm, prompt=custom_prompt, callback_manager=manager)
+    async_tools = load_tools(["serpapi"], llm=llm, callback_manager=manager)
+    agent = LLMSingleActionAgent(
+        llm_chain=llm_chain,
+        output_parser=output_parser,
+        stop=["\nObservation:"],
+        allowed_tools=tool_names,
+        callback_manager=manager
+    )
+    agent_executor = AgentExecutor.from_agent_and_tools(agent=agent, tools=async_tools, verbose=True, callback_manager=manager)
+    return await agent_executor.arun(inputs)
