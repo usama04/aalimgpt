@@ -17,8 +17,8 @@ load_dotenv(dotenv_path="../.env")
 
 # Set up tools
 
-search = SerpAPIWrapper()
-
+#search = SerpAPIWrapper()
+"""
 tools = [
     Tool(
         name="search",
@@ -26,7 +26,7 @@ tools = [
         description="Searches the web for Islamic websites to answer queries",
     ),
 ]
-
+"""
 # Set up the base template
 # Add this to the template for memory
 # Previous conversation history:
@@ -121,7 +121,7 @@ class CustomOutputParser(AgentOutputParser):
 output_parser = CustomOutputParser()
 
 # Setup LLM
-llm = ChatOpenAI(temperature=0)
+#llm = ChatOpenAI(temperature=0)
 """
 # LLM chain consisting of the LLM and a prompt
 llm_chain = LLMChain(llm=llm, prompt=custom_prompt)
@@ -142,20 +142,23 @@ agent_executor = AgentExecutor.from_agent_and_tools(agent=agent,
                                                     #memory=memory
                                                     )
 """
+
+manager = CallbackManager([StdOutCallbackHandler()])
+llm = ChatOpenAI(temperature=0, callback_manager=manager)
+async_tools = load_tools(["serpapi"], llm=llm, callback_manager=manager)
+tool_names = [tool.name for tool in async_tools]
+custom_prompt = CustomPromptTemplate(
+    template=template,
+    tools=async_tools,
+    # This omits the `agent_scratchpad`, `tools`, and `tool_names` variables because those are generated dynamically
+    # This includes the `intermediate_steps` variable because that is needed
+    #input_variables=["input", "intermediate_steps", "history"], # Use when with history
+    input_variables=["input", "intermediate_steps"],
+)
+llm_chain = LLMChain(llm=llm, prompt=custom_prompt, callback_manager=manager)
+
 async def async_agent_executor(inputs):
-    manager = CallbackManager([StdOutCallbackHandler()])
-    llm = ChatOpenAI(temperature=0, callback_manager=manager)
-    async_tools = load_tools(["serpapi"], llm=llm, callback_manager=manager)
-    tool_names = [tool.name for tool in async_tools]
-    custom_prompt = CustomPromptTemplate(
-        template=template,
-        tools=async_tools,
-        # This omits the `agent_scratchpad`, `tools`, and `tool_names` variables because those are generated dynamically
-        # This includes the `intermediate_steps` variable because that is needed
-        #input_variables=["input", "intermediate_steps", "history"], # Use when with history
-        input_variables=["input", "intermediate_steps"],
-    )
-    llm_chain = LLMChain(llm=llm, prompt=custom_prompt, callback_manager=manager)
+    
     agent = LLMSingleActionAgent(
         llm_chain=llm_chain,
         output_parser=output_parser,
