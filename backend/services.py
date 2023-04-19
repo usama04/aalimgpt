@@ -11,9 +11,7 @@ import settings
 from typing import List, Dict
 from fastapi_mail import FastMail, MessageSchema, MessageType
 import openai
-from api.aalim2 import (AgentFinish, agent, agent_executor, custom_prompt,
-                    llm_chain, output_parser, search, tool_names,
-                    tools, async_agent_executor)
+from api.aalim2 import async_agent_executor
 openai.api_key = settings.OPENAI_API_KEY
 
 def create_database():
@@ -356,6 +354,7 @@ async def mufti_agent(request: Request, db: orm.Session = Depends(get_db), user:
                 raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid message format")
             prompt += "Scholar: " + mes + "\n"
     #agent_output = agent_executor.run(prompt)
+    #agent_output = await agent_executor.arun(prompt)
     agent_output = await async_agent_executor(prompt)
     if "Scholar:" in agent_output[:8]:
         agent_output = agent_output.split("Scholar: ")[1]

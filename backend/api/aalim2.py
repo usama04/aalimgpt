@@ -79,7 +79,7 @@ class CustomPromptTemplate(BaseChatPromptTemplate):
         #kwargs["history"] = kwargs["history"].replace("\n", "\n\t")
         formatted = self.template.format(**kwargs)
         return [HumanMessage(content=formatted)]
-    
+""" 
 custom_prompt = CustomPromptTemplate(
     template=template,
     tools=tools,
@@ -88,7 +88,7 @@ custom_prompt = CustomPromptTemplate(
     #input_variables=["input", "intermediate_steps", "history"], # Use when with history
     input_variables=["input", "intermediate_steps"],
 )
-
+"""  
 # Output parser
 
 class CustomOutputParser(AgentOutputParser):
@@ -122,7 +122,7 @@ output_parser = CustomOutputParser()
 
 # Setup LLM
 llm = ChatOpenAI(temperature=0)
-
+"""
 # LLM chain consisting of the LLM and a prompt
 llm_chain = LLMChain(llm=llm, prompt=custom_prompt)
 
@@ -141,12 +141,21 @@ agent_executor = AgentExecutor.from_agent_and_tools(agent=agent,
                                                     verbose=True, 
                                                     #memory=memory
                                                     )
-
+"""
 async def async_agent_executor(inputs):
     manager = CallbackManager([StdOutCallbackHandler()])
     llm = ChatOpenAI(temperature=0, callback_manager=manager)
-    llm_chain = LLMChain(llm=llm, prompt=custom_prompt, callback_manager=manager)
     async_tools = load_tools(["serpapi"], llm=llm, callback_manager=manager)
+    tool_names = [tool.name for tool in async_tools]
+    custom_prompt = CustomPromptTemplate(
+        template=template,
+        tools=async_tools,
+        # This omits the `agent_scratchpad`, `tools`, and `tool_names` variables because those are generated dynamically
+        # This includes the `intermediate_steps` variable because that is needed
+        #input_variables=["input", "intermediate_steps", "history"], # Use when with history
+        input_variables=["input", "intermediate_steps"],
+    )
+    llm_chain = LLMChain(llm=llm, prompt=custom_prompt, callback_manager=manager)
     agent = LLMSingleActionAgent(
         llm_chain=llm_chain,
         output_parser=output_parser,
@@ -154,5 +163,5 @@ async def async_agent_executor(inputs):
         allowed_tools=tool_names,
         callback_manager=manager
     )
-    agent_executor = AgentExecutor.from_agent_and_tools(agent=agent, tools=async_tools, verbose=True, callback_manager=manager)
+    agent_executor = AgentExecutor.from_agent_and_tools(agent=agent, tools=async_tools, verbose=False, callback_manager=manager)
     return await agent_executor.arun(inputs)
