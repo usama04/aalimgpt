@@ -44,7 +44,8 @@ Action Input: the input to the action
 Observation: the result of the action
 ... (this Thought/Action/Action Input/Observation can repeat N times)
 Thought: I now know the final answer
-Final Answer: A verbose final answer to the original input question which also contains Quran and Sunnah references
+Final Answer: A verbose final answer to the original input question which should contain Quran and Sunnah qoutes and their references that you have to search using the tools. 
+Do not name the tools you used in the final answer.
 
 Begin! Remember to be as authentic as possible as you are an Islamic Scholar! Final Answer MUST be verbose and MUST include Quran and Sunnah references.
 
@@ -79,16 +80,7 @@ class CustomPromptTemplate(BaseChatPromptTemplate):
         #kwargs["history"] = kwargs["history"].replace("\n", "\n\t")
         formatted = self.template.format(**kwargs)
         return [HumanMessage(content=formatted)]
-""" 
-custom_prompt = CustomPromptTemplate(
-    template=template,
-    tools=tools,
-    # This omits the `agent_scratchpad`, `tools`, and `tool_names` variables because those are generated dynamically
-    # This includes the `intermediate_steps` variable because that is needed
-    #input_variables=["input", "intermediate_steps", "history"], # Use when with history
-    input_variables=["input", "intermediate_steps"],
-)
-"""  
+
 # Output parser
 
 class CustomOutputParser(AgentOutputParser):
@@ -120,32 +112,46 @@ class CustomOutputParser(AgentOutputParser):
 
 output_parser = CustomOutputParser()
 
-# Setup LLM
-#llm = ChatOpenAI(temperature=0)
-"""
-# LLM chain consisting of the LLM and a prompt
-llm_chain = LLMChain(llm=llm, prompt=custom_prompt)
+# Uncomment below for sync
 
-tool_names = [tool.name for tool in tools]
-agent = LLMSingleActionAgent(
-    llm_chain=llm_chain, 
-    output_parser=output_parser,
-    stop=["\nObservation:"], 
-    allowed_tools=tool_names
-)
+# tools = load_tools(["google-serper"])
 
-#memory=ConversationBufferWindowMemory(k=2)
+# llm = ChatOpenAI(temperature=0)
 
-agent_executor = AgentExecutor.from_agent_and_tools(agent=agent, 
-                                                    tools=tools, 
-                                                    verbose=True, 
-                                                    #memory=memory
-                                                    )
-"""
+# custom_prompt = CustomPromptTemplate(
+#     template=template,
+#     tools=tools,
+#     # This omits the `agent_scratchpad`, `tools`, and `tool_names` variables because those are generated dynamically
+#     # This includes the `intermediate_steps` variable because that is needed
+#     #input_variables=["input", "intermediate_steps", "history"], # Use when with history
+#     input_variables=["input", "intermediate_steps"],
+# )
+
+# # LLM chain consisting of the LLM and a prompt
+# llm_chain = LLMChain(llm=llm, prompt=custom_prompt)
+
+# tool_names = [tool.name for tool in tools]
+# agent = LLMSingleActionAgent(
+#     llm_chain=llm_chain, 
+#     output_parser=output_parser,
+#     stop=["\nObservation:"], 
+#     allowed_tools=tool_names
+# )
+
+# #memory=ConversationBufferWindowMemory(k=2)
+
+# agent_executor = AgentExecutor.from_agent_and_tools(agent=agent, 
+#                                                     tools=tools, 
+#                                                     verbose=True, 
+#                                                     #memory=memory
+#                                                     )
+
+
+# Uncomment below for async
 
 manager = CallbackManager([StdOutCallbackHandler()])
 llm = ChatOpenAI(temperature=0, callback_manager=manager)
-async_tools = load_tools(["serpapi"], llm=llm, callback_manager=manager)
+async_tools = load_tools(["google-serper"], llm=llm, callback_manager=manager)
 tool_names = [tool.name for tool in async_tools]
 custom_prompt = CustomPromptTemplate(
     template=template,
@@ -168,3 +174,4 @@ async def async_agent_executor(inputs):
     )
     agent_executor = AgentExecutor.from_agent_and_tools(agent=agent, tools=async_tools, verbose=False, callback_manager=manager)
     return await agent_executor.arun(inputs)
+    
