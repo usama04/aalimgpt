@@ -358,6 +358,7 @@ async def mufti_agent(request: Request, db: orm.Session = Depends(get_db), user:
     agent_output = await async_agent_executor(prompt)
     if "Scholar:" in agent_output[:8]:
         agent_output = agent_output.split("Scholar: ")[1]
-    chat = await save_chat_response(db, user, prompt=messages, generated_response=agent_output)
-    ret_response = {"user": "assistant", "message": agent_output, "chat_id": chat.id}
+    ret_response = {"user": "assistant", "message": agent_output}
+    chat = await save_chat_response(db, user, prompt=messages, generated_response=ret_response)
+    ret_response["chat_id"] = chat.id
     return ret_response
