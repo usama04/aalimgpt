@@ -151,7 +151,7 @@ output_parser = CustomOutputParser()
 
 manager = CallbackManager([StdOutCallbackHandler()])
 llm = ChatOpenAI(temperature=0, callback_manager=manager)
-async_tools = load_tools(["google-serper"], llm=llm, callback_manager=manager)
+async_tools = load_tools(["serpapi"], llm=llm, callback_manager=manager)
 tool_names = [tool.name for tool in async_tools]
 custom_prompt = CustomPromptTemplate(
     template=template,
