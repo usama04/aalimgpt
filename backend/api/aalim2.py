@@ -44,8 +44,7 @@ Action Input: the input to the action
 Observation: the result of the action
 ... (this Thought/Action/Action Input/Observation can repeat N times)
 Thought: I now know the final answer
-Final Answer: A verbose final answer to the original input question which should contain Quran and Sunnah qoutes and their references that you have to search using the tools. 
-Do not name the tools you used in the final answer.
+Final Answer: A verbose final answer to the original input question which should contain Quran and Sunnah qoutes and their references that you have to search using the tools.
 
 Begin! Remember to be as authentic as possible as you are an Islamic Scholar! Final Answer MUST be verbose and MUST include Quran and Sunnah references.
 
