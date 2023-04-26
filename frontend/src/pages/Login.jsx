@@ -14,18 +14,22 @@ const Login = () => {
     const navigate = useNavigate();
 
     const submitLogin = async () => {
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: JSON.stringify(`grant_type=&username=${email}&password=${password}&scope=&client_id=&client_secret=`),
-        };
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/login`, requestOptions);
-        const data = await response.json();
-        if (data.error) {
-            setErrorMessages(data.detail);
-        } else {
-            setToken(data.access_token);
-            navigate('/chat');
+        try {
+            const requestOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: JSON.stringify(`grant_type=&username=${email}&password=${password}&scope=&client_id=&client_secret=`),
+            };
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/login`, requestOptions);
+            const data = await response.json();
+            if (data.access_token) {
+                setToken(data.access_token);
+                navigate('/chat');
+            } else {
+                setErrorMessages("Invalid username or password");
+            }
+        } catch (error) {
+            setErrorMessages("Invalid username or password");
         }
     }
 
