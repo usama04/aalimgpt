@@ -17,8 +17,6 @@ from fastapi.responses import HTMLResponse
 openai.api_key = settings.OPENAI_API_KEY
 
 app = FastAPI(
-    docs_url="/api/docs",
-    redoc_url="/api/redoc",
     default_response_class=CustomJSONResponse,
 )
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
